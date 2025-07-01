@@ -1,0 +1,12 @@
+{
+  "homepage": {
+    "title": "Ana Sayfa Başlığı",
+    "description": "Ana sayfa açıklaması buraya gelecek.",
+    "keywords": "nextjs, seo, örnek"
+  },
+  "about": {
+    "title": "Hakkımızda Başlığı",
+    "description": "Hakkımızda sayfası açıklaması.",
+    "keywords": "hakkımızda, bilgi"
+  }
+}
