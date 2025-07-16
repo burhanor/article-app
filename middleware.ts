@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import { verifyToken } from "./lib/tokenHelper";
+import { cookies } from "next/headers";
+export async function middleware(request: NextRequest) {
+  const token = request.cookies.get("accessToken")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
 
-export function middleware(request: NextRequest) {
-  const isLoggedIn = request.cookies.get("accessToken"); // örnek: çerezde token var mı?
+  const accessToken = await verifyToken(token, refreshToken);
+  let isLoggedIn = false;
+  if (accessToken) {
+    const cookieStore = await cookies();
+    isLoggedIn = true;
+    cookieStore.set("accessToken", accessToken, {
+      httpOnly: true,
+    });
+  }
 
   const pathname = request.nextUrl.pathname;
 
@@ -11,3 +23,6 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+export const config = {
+  matcher: ["/administrator/:path*"],
+};

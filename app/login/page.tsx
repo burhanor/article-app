@@ -1,7 +1,12 @@
 import React from "react";
+import LoginForm from "./components/loginform";
 
-const LoginPage = () => {
-  return <div>LoginPage</div>;
-};
-
-export default LoginPage;
+export default function LoginPage() {
+  return (
+    <div className="flex  flex-col items-center justify-center min-h-screen">
+      <div className="w-full max-w-sm ">
+        <LoginForm />
+      </div>
+    </div>
+  );
+}
