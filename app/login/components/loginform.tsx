@@ -5,23 +5,32 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { Login } from "@/services/authService";
 import React from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
 
 const LoginForm = ({ className, ...props }: React.ComponentProps<"div">) => {
+  const authStore = useAuthStore();
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const router = useRouter();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const toastId = "logintoast";
+    toast.dismiss(toastId);
 
     try {
-      const success = await Login(email, password);
-      if (success) {
-        // Redirect or show success message
-        console.log("Giriş başarılı");
+      const tokenPayload = await Login(email, password);
+      if (tokenPayload) {
+        authStore.setToken(tokenPayload);
+        router.push("/");
+      } else {
+        toast("Kullanıcı adı veya şifre yanlış", {
+          id: toastId,
+        });
       }
-    } catch (error) {
-      console.error("Giriş başarısız:", error);
-      // Show error message to the user
-    }
+    } catch {}
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

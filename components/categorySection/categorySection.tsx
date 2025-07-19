@@ -1,11 +1,8 @@
-import { Category } from "@/models/Category";
+import { fetchCategories } from "@/services/categoryService";
 import Link from "next/link";
 
-export default function CategorySection({
-  categories,
-}: {
-  categories: Category[];
-}) {
+export default async function CategorySection() {
+  const categories = await fetchCategories();
   return (
     <section className="bg-gray-100 p-4 rounded-lg shadow-md  mt-5">
       <h2 className="text-xl font-semibold mb-4">Kategoriler</h2>

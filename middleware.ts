@@ -7,6 +7,7 @@ export async function middleware(request: NextRequest) {
 
   const accessToken = await verifyToken(token, refreshToken);
   let isLoggedIn = false;
+
   if (accessToken) {
     const cookieStore = await cookies();
     isLoggedIn = true;
@@ -20,9 +21,12 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/administrator") && !isLoggedIn) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
+  if (pathname === "/login" && isLoggedIn) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
   return NextResponse.next();
 }
 export const config = {
-  matcher: ["/administrator/:path*"],
+  matcher: ["/administrator/:path*", "/login"],
 };

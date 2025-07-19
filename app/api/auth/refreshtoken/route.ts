@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
         sameSite: "strict",
       });
     }
-
     return response;
   } catch (err) {
     console.error("Token refresh error:", err);

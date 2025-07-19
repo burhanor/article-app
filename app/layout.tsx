@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Merriweather } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header/header";
+import { Toaster } from "@/components/ui/sonner";
 
 const merriweather = Merriweather({
   variable: "--font-merriweather",
@@ -25,10 +26,11 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body
-        className={`${merriweather.variable}  antialiased container mx-auto mt-4`}
+        className={`${merriweather.variable}  antialiased container mx-auto mt-4 pr-0`}
       >
         <Header />
         <div>{children}</div>
+        <Toaster position="top-right" />
       </body>
     </html>
   );
