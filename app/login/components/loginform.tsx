@@ -24,6 +24,7 @@ const LoginForm = ({ className, ...props }: React.ComponentProps<"div">) => {
       const tokenPayload = await Login(email, password);
       if (tokenPayload) {
         authStore.setToken(tokenPayload);
+
         router.push("/");
       } else {
         toast("Kullanıcı adı veya şifre yanlış", {

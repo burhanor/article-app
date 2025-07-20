@@ -18,7 +18,7 @@ import { useAuthStore } from "@/stores/authStore";
 const Profile = () => {
   const { isAuthenticated, image, name, clearToken } = useAuthStore();
   const router = useRouter();
-
+  console.log("Profile component rendered", isAuthenticated, image, name);
   async function handleLogout() {
     try {
       const result = await Logout();

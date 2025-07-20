@@ -41,6 +41,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-add: var(--add);
+  --color-update: var(--update);
+  --color-delete: var(--delete);
 }
 
 :root {
@@ -76,6 +79,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --add: #4caf50;
+  --update: #2196f3;
+  --delete: #f44336;
 }
 
 .dark {
@@ -110,6 +116,9 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --add: #4caf50;
+  --update: #2196f3;
+  --delete: #f44336;
 }
 
 @layer base {
@@ -119,4 +128,21 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.btn-add {
+  @apply text-primary-foreground p-2 rounded-md hover:bg-primary/90 transition cursor-pointer;
+  background-color: var(--color-add);
+}
+.btn-update {
+  @apply text-primary-foreground p-2  rounded-md hover:bg-primary/90 transition cursor-pointer;
+  background-color: var(--color-update);
+}
+.btn-delete {
+  @apply text-primary-foreground p-2  rounded-md hover:bg-primary/90 transition cursor-pointer;
+  background-color: var(--color-delete);
+}
+
+body {
+  overflow: hidden;
 }
