@@ -6,7 +6,7 @@ interface CategoryStore {
   setCategories: (categories: Category[]) => void;
   addCategory: (category: Category) => void;
   updateCategory: (category: Category) => void;
-  deleteCategory: (id: number) => void;
+  deleteCategory: (id: number[]) => void;
   selectedCategories: Category[];
   setSelectedCategories: (categories: Category[]) => void;
 }
@@ -26,9 +26,9 @@ export const useCategoryStore = create<CategoryStore>()((set) => ({
       ),
     })),
 
-  deleteCategory: (id: number) =>
+  deleteCategory: (id: number[]) =>
     set((state) => ({
-      categories: state.categories.filter((c) => c.id !== id),
+      categories: state.categories.filter((c) => !id.includes(c.id)),
     })),
   setSelectedCategories: (categories: Category[]) =>
     set({ selectedCategories: categories }),

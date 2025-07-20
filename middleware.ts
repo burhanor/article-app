@@ -13,6 +13,8 @@ export async function middleware(request: NextRequest) {
     isLoggedIn = true;
     cookieStore.set("accessToken", accessToken, {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
   }
 

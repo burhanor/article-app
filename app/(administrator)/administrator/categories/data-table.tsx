@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { DataTablePagination } from "@/components/datatable/datatable-pagination";
 import { ColumnMetaType } from "@/models/types/ColumnMetaType";
@@ -30,19 +30,26 @@ import { DataTableFacetedFilter } from "./datatable-faceted-filter";
 import { statusOptions } from "@/lib/enumHelper";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-
-  data: TData[];
+import { Category } from "@/models/Category";
+interface DataTableProps<TValue> {
+  columns: ColumnDef<Category, TValue>[];
+  data: Category[];
+  setSelectedCategories: (data: Category[]) => void;
+  rowSelection: Record<string, boolean>;
+  onRowSelectionChange: (
+    updater: React.SetStateAction<Record<string, boolean>>
+  ) => void;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  setSelectedCategories,
+  rowSelection,
+  onRowSelectionChange,
+}: DataTableProps<TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
 
   const table = useReactTable({
@@ -54,22 +61,30 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: onRowSelectionChange,
     onGlobalFilterChange: setGlobalFilter,
     getFacetedRowModel: getFacetedRowModel(),
     enableRowSelection: true,
-
     state: {
       sorting,
       columnFilters,
       rowSelection,
       globalFilter,
     },
+    initialState: {
+      pagination: {
+        pageSize: 20,
+      },
+    },
   });
   const isFiltered = table.getState().columnFilters.length > 0;
-  const selectedRows = table.getSelectedRowModel().rows;
-  console.log("Selected Rows:", selectedRows);
-
+  useEffect(() => {
+    const selectedData = table
+      .getSelectedRowModel()
+      .rows.map((row) => row.original);
+    console.log("Selected Data:", selectedData);
+    setSelectedCategories(selectedData);
+  }, [table.getSelectedRowModel().rows]);
   const names = data.map((item) => ({
     label: item.name,
     value: item.name,
