@@ -7,7 +7,7 @@ const statusClasses: Record<Status, string> = {
 };
 
 const statusText: Record<Status, string> = {
-  [Status.Pending]: "Taslak",
+  [Status.Pending]: "Beklemede",
   [Status.Published]: "Yayınlandı",
   [Status.Rejected]: "Reddedildi",
 };

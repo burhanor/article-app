@@ -1,3 +1,4 @@
+import { ActionTypes } from "@/enums/ActionTypes";
 import { Category } from "@/models/Category";
 
 import { create } from "zustand";
@@ -9,6 +10,8 @@ interface CategoryStore {
   deleteCategory: (id: number[]) => void;
   selectedCategories: Category[];
   setSelectedCategories: (categories: Category[]) => void;
+  actionType: ActionTypes;
+  setActionType: (actionType: ActionTypes) => void;
 }
 
 export const useCategoryStore = create<CategoryStore>()((set) => ({
@@ -25,7 +28,8 @@ export const useCategoryStore = create<CategoryStore>()((set) => ({
         c.id === category.id ? category : c
       ),
     })),
-
+  actionType: ActionTypes.UNDEFINED,
+  setActionType: (actionType: ActionTypes) => set({ actionType }),
   deleteCategory: (id: number[]) =>
     set((state) => ({
       categories: state.categories.filter((c) => !id.includes(c.id)),

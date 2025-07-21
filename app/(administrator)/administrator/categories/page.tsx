@@ -8,9 +8,12 @@ import { useEffect, useState } from "react";
 import { ActionTypes } from "@/enums/ActionTypes";
 import Swal from "sweetalert2";
 import { ResponseStatus } from "@/enums/ResponseStatus";
+import { UpsertCategory } from "./upsertCategory";
+import { useModal } from "@/hooks/use-modal";
 
 export default function CategoriesPage() {
   const [rowSelection, setRowSelection] = useState({});
+  const modal = useModal();
 
   const categoryStore = useCategoryStore();
   useEffect(() => {
@@ -74,11 +77,37 @@ export default function CategoriesPage() {
   };
 
   function handleUpdateCategory() {
-    alert("Kategori güncelleme işlemi henüz uygulanmadı.");
-    // Logic for updating a category
+    const selectedCategories = categoryStore.selectedCategories;
+    if (selectedCategories.length === 0) {
+      Swal.fire({
+        title: "Uyarı",
+        text: "Güncellemek için bir kategori seçmelisiniz.",
+        icon: "warning",
+        confirmButtonText: "Tamam",
+      });
+      return;
+    }
+    if (selectedCategories.length > 1) {
+      Swal.fire({
+        title: "Uyarı",
+        text: "Aynı anda sadece bir kategoriyi güncelleyebilirsiniz.",
+        icon: "warning",
+        confirmButtonText: "Tamam",
+      });
+      return;
+    }
+    categoryStore.setActionType(ActionTypes.UPDATE);
+    modal.openModal();
+
+    // Logic for updating the selected category
+    // You can pass the selected category data to the modal if needed
+    const categoryToUpdate = selectedCategories[0];
+    console.log("Selected Category for Update:", categoryToUpdate);
   }
   function handleAddCategory() {
-    alert("Kategori ekleme işlemi henüz uygulanmadı.");
+    categoryStore.setActionType(ActionTypes.ADD);
+    modal.openModal();
+
     // Logic for adding a new category
   }
 
@@ -101,7 +130,8 @@ export default function CategoriesPage() {
   return (
     <>
       <AdminCrudButton handleCrud={handleCrud} />
-      <div className="container mx-auto py-10">
+      <UpsertCategory modal={modal} />
+      <div className=" mx-auto py-10">
         <DataTable
           columns={columns}
           data={categoryStore.categories}

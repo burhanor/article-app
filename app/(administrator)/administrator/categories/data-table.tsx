@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
 
 import { DataTablePagination } from "@/components/datatable/datatable-pagination";
 import { ColumnMetaType } from "@/models/types/ColumnMetaType";
-import { DataTableFacetedFilter } from "./datatable-faceted-filter";
+import { DataTableFacetedFilter } from "../../../../components/datatable/datatable-faceted-filter";
 import { statusOptions } from "@/lib/enumHelper";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
