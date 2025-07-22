@@ -1,6 +1,3 @@
-"use client";
-import * as React from "react";
-
 import {
   Dialog,
   DialogContent,
@@ -8,20 +5,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useModal } from "@/hooks/use-modal";
-import { useCategoryStore } from "@/stores/categoryStore";
-import { ActionTypes } from "@/enums/ActionTypes";
-import CategoryForm from "./categoryForm";
+import React from "react";
 
-export function UpsertCategory({
+export default function UpsertModal({
   modal,
+  children,
+  title,
 }: {
   modal: ReturnType<typeof useModal>;
+  children: React.ReactNode;
+  title: string;
 }) {
-  const { actionType } = useCategoryStore();
   const { open, setOpen } = modal;
-
   const preventClose = React.useCallback((e: Event) => e.preventDefault(), []);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -30,13 +26,9 @@ export function UpsertCategory({
         onPointerDownOutside={preventClose}
       >
         <DialogHeader>
-          <DialogTitle>
-            {actionType === ActionTypes.ADD
-              ? "Kategori Ekle"
-              : "Kategori Güncelle"}
-          </DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <CategoryForm modal={modal} />
+        {children}
       </DialogContent>
     </Dialog>
   );

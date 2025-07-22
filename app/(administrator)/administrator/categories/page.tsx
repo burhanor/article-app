@@ -1,20 +1,21 @@
 "use client";
 import AdminCrudButton from "@/components/adminCrudButton/admin-crud-button";
 import { columns } from "./columns";
-import { DataTable } from "./data-table";
 import { deleteCategories, fetchCategories } from "@/services/categoryService";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useEffect, useState } from "react";
 import { ActionTypes } from "@/enums/ActionTypes";
 import Swal from "sweetalert2";
 import { ResponseStatus } from "@/enums/ResponseStatus";
-import { UpsertCategory } from "./upsertCategory";
 import { useModal } from "@/hooks/use-modal";
+import UpsertModal from "@/components/modals/upsertModal/upsertModal";
+import CategoryForm from "./categoryForm";
+import { GenericDataTable } from "@/components/datatable/generic-datatable";
 
 export default function CategoriesPage() {
   const [rowSelection, setRowSelection] = useState({});
   const modal = useModal();
-
+  const [title, setTitle] = useState("Kategori İşlemleri");
   const categoryStore = useCategoryStore();
   useEffect(() => {
     const fetchData = async () => {
@@ -107,17 +108,17 @@ export default function CategoriesPage() {
   function handleAddCategory() {
     categoryStore.setActionType(ActionTypes.ADD);
     modal.openModal();
-
-    // Logic for adding a new category
   }
 
   async function handleCrud(action: ActionTypes) {
     switch (action) {
       case ActionTypes.ADD:
         handleAddCategory();
+        setTitle("Kategori Ekle");
         break;
       case ActionTypes.UPDATE:
         handleUpdateCategory();
+        setTitle("Kategori Güncelle");
         break;
       case ActionTypes.DELETE:
         await handleDeleteCategory();
@@ -130,12 +131,14 @@ export default function CategoriesPage() {
   return (
     <>
       <AdminCrudButton handleCrud={handleCrud} />
-      <UpsertCategory modal={modal} />
+      <UpsertModal modal={modal} title={title}>
+        <CategoryForm modal={modal} />
+      </UpsertModal>
       <div className=" mx-auto py-10">
-        <DataTable
+        <GenericDataTable
           columns={columns}
           data={categoryStore.categories}
-          setSelectedCategories={categoryStore.setSelectedCategories}
+          setDatas={categoryStore.setSelectedCategories}
           rowSelection={rowSelection}
           onRowSelectionChange={setRowSelection}
         />

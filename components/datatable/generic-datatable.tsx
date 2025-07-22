@@ -26,28 +26,27 @@ import { useEffect, useState } from "react";
 
 import { DataTablePagination } from "@/components/datatable/datatable-pagination";
 import { ColumnMetaType } from "@/models/types/ColumnMetaType";
-import { DataTableFacetedFilter } from "../../../../components/datatable/datatable-faceted-filter";
 import { statusOptions } from "@/lib/enumHelper";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { Category } from "@/models/Category";
-interface DataTableProps<TValue> {
-  columns: ColumnDef<Category, TValue>[];
-  data: Category[];
-  setSelectedCategories: (data: Category[]) => void;
+import { DataTableFacetedFilter } from "./datatable-faceted-filter";
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  setDatas: (data: TData[]) => void;
   rowSelection: Record<string, boolean>;
   onRowSelectionChange: (
     updater: React.SetStateAction<Record<string, boolean>>
   ) => void;
 }
 
-export function DataTable<TValue>({
+export function GenericDataTable<TData, TValue>({
   columns,
   data,
-  setSelectedCategories,
+  setDatas,
   rowSelection,
   onRowSelectionChange,
-}: DataTableProps<TValue>) {
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
@@ -71,6 +70,8 @@ export function DataTable<TValue>({
       rowSelection,
       globalFilter,
     },
+    autoResetPageIndex: false,
+    autoResetAll: false,
     initialState: {
       pagination: {
         pageSize: 20,
@@ -78,21 +79,19 @@ export function DataTable<TValue>({
     },
   });
   const isFiltered = table.getState().columnFilters.length > 0;
+  const selectedRows = table.getSelectedRowModel().rows;
+
   useEffect(() => {
-    const selectedData = table
-      .getSelectedRowModel()
-      .rows.map((row) => row.original);
-    console.log("Selected Data:", selectedData);
-    setSelectedCategories(selectedData);
-  }, [table.getSelectedRowModel().rows]);
-  const names = data.map((item) => ({
-    label: item.name,
-    value: item.name,
-  }));
-  const slugs = data.map((item) => ({
-    label: item.slug,
-    value: item.slug,
-  }));
+    const selectedData = selectedRows.map((row) => row.original);
+    setDatas(selectedData);
+  }, [selectedRows, setDatas, table]);
+  const getUniqueOptions = <K extends keyof TData>(key: K) => {
+    const uniqueValues = Array.from(new Set(data.map((item) => item[key])));
+    return uniqueValues.map((value) => ({
+      label: String(value),
+      value: String(value),
+    }));
+  };
 
   return (
     <div className="rounded-md border">
@@ -104,27 +103,30 @@ export function DataTable<TValue>({
           className="w-60 transition-all duration-200 focus:ring-2 focus:ring-primary focus:border-primary rounded-md shadow-sm"
         />
         <div className="flex gap-2 ml-auto pe-2">
-          {table.getColumn("name") && (
-            <DataTableFacetedFilter
-              column={table.getColumn("name")}
-              title="Name"
-              options={names}
-            />
-          )}
-          {table.getColumn("slug") && (
-            <DataTableFacetedFilter
-              column={table.getColumn("slug")}
-              title="Slug"
-              options={slugs}
-            />
-          )}
-          {table.getColumn("status") && (
-            <DataTableFacetedFilter
-              column={table.getColumn("status")}
-              title="Status"
-              options={statusOptions}
-            />
-          )}
+          {table
+            .getAllLeafColumns()
+            .filter(
+              (column) =>
+                (column.columnDef.meta as ColumnMetaType)?.showHeaderFilter
+            )
+            .map((column) =>
+              column.getIsVisible() ? (
+                <DataTableFacetedFilter
+                  key={column.id}
+                  column={column}
+                  title={
+                    (column.columnDef.meta as ColumnMetaType)?.title ??
+                    column.id.charAt(0).toUpperCase() + column.id.slice(1)
+                  }
+                  options={
+                    column.id === "status"
+                      ? statusOptions
+                      : getUniqueOptions(column.id as keyof TData)
+                  }
+                />
+              ) : null
+            )}
+
           {isFiltered && (
             <Button
               variant="ghost"

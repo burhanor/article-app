@@ -46,12 +46,14 @@ export const columns: ColumnDef<Category>[] = [
     header: ({ column }) => {
       return DataTableColumnHeader({
         column,
-        title: "Name",
+        title: "Kategori",
       });
     },
     cell: ({ row }) => <span>{row.getValue("name")}</span>,
     meta: {
       className: "col-span-22",
+      title: "Kategori",
+      showHeaderFilter: true,
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -72,6 +74,8 @@ export const columns: ColumnDef<Category>[] = [
     ),
     meta: {
       className: "col-span-22",
+      title: "Slug",
+      showHeaderFilter: true,
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -90,6 +94,8 @@ export const columns: ColumnDef<Category>[] = [
     ),
     meta: {
       className: "col-span-5",
+      title: "Durum",
+      showHeaderFilter: true,
     },
     filterFn: (row, id, value) => {
       return value.toString().includes(row.getValue(id));
