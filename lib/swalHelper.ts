@@ -26,21 +26,21 @@ export function showError(message: string, title?: string): void {
   });
 }
 
-export async function confirmDeleteDialog<T extends { name: string }>(
+export async function confirmDeleteDialog<T>(
   items: T[],
-  options?: {
+  options: {
+    itemLabelKey: keyof T;
     title?: string;
     confirmText?: string;
     cancelText?: string;
-    itemLabelKey?: keyof T;
   }
 ): Promise<boolean> {
   const {
     title = "Onay",
     confirmText = "Evet, sil",
     cancelText = "Hayır, iptal et",
-    itemLabelKey = "name",
-  } = options || {};
+    itemLabelKey,
+  } = options;
 
   const htmlText = `
     <div style="max-height: 220px; overflow-y: auto;">
@@ -57,7 +57,7 @@ export async function confirmDeleteDialog<T extends { name: string }>(
 
   const result = await Swal.fire({
     title,
-    html: `Seçilen öğeleri silmek istediğinize emin misiniz?<br>${htmlText}`,
+    html: `Seçilen kayıtları silmek istediğinize emin misiniz?<br>${htmlText}`,
     icon: "warning",
     showCancelButton: true,
     confirmButtonText: confirmText,

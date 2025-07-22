@@ -1,46 +1,48 @@
 "use client";
 import AdminCrudButton from "@/components/adminCrudButton/admin-crud-button";
 import { columns } from "./columns";
-import { deleteCategories, fetchCategories } from "@/services/categoryService";
-import { useCategoryStore } from "@/stores/categoryStore";
 import { useEffect, useState } from "react";
 
 import { useModal } from "@/hooks/use-modal";
 import UpsertModal from "@/components/modals/upsertModal/upsertModal";
-import CategoryForm from "./categoryForm";
+import MenuForm from "./menuForm";
 import { GenericDataTable } from "@/components/datatable/generic-datatable";
 
 import { useCrudHandlers } from "@/hooks/useCrudHandlers";
+import { deleteMenuItems, fetchMenuItems } from "@/services/menuItemService";
+import { useMenuStore } from "@/stores/menuStore";
+import { menuTypeOptions } from "@/lib/enumHelper";
 
-export default function CategoriesPage() {
+export default function MenuPage() {
   const [rowSelection, setRowSelection] = useState({});
   const modal = useModal();
-  const categoryStore = useCategoryStore();
+  const menuStore = useMenuStore();
   useEffect(() => {
-    fetchCategories().then(categoryStore.setItems);
+    fetchMenuItems().then(menuStore.setItems);
   }, []);
 
   const { handleCrud, title } = useCrudHandlers({
-    entityName: "Kategori",
-    store: categoryStore,
-    deleteFn: deleteCategories,
+    entityName: "Menü",
+    store: menuStore,
+    deleteFn: deleteMenuItems,
     openModal: modal.openModal,
-    itemLabelKey: "name",
+    itemLabelKey: "title",
   });
 
   return (
     <>
       <AdminCrudButton handleCrud={handleCrud} />
       <UpsertModal modal={modal} title={title}>
-        <CategoryForm modal={modal} />
+        <MenuForm modal={modal} />
       </UpsertModal>
       <div className=" mx-auto py-10">
         <GenericDataTable
           columns={columns}
-          data={categoryStore.items}
-          setDatas={categoryStore.setSelectedItems}
+          data={menuStore.items}
+          setDatas={menuStore.setSelectedItems}
           rowSelection={rowSelection}
           onRowSelectionChange={setRowSelection}
+          enumOptions={menuTypeOptions}
         />
       </div>
     </>

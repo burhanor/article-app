@@ -19,13 +19,15 @@ interface CrudHandlersOptions<T> {
     ids: number[]
   ) => Promise<{ status: ResponseStatus; message?: string }>;
   openModal: () => void;
+  itemLabelKey: keyof T;
 }
 
-export function useCrudHandlers<T extends { id: number; name: string }>({
+export function useCrudHandlers<T extends { id: number }>({
   entityName,
   store,
   deleteFn,
   openModal,
+  itemLabelKey,
 }: CrudHandlersOptions<T>) {
   const [title, setTitle] = useState("Kategori İşlemleri");
   const handleDelete = async () => {
@@ -39,6 +41,7 @@ export function useCrudHandlers<T extends { id: number; name: string }>({
 
     const ids = selectedItems.map((item) => item.id);
     const confirmed = await confirmDeleteDialog(selectedItems, {
+      itemLabelKey: itemLabelKey,
       title: `${entityName}leri Sil`,
     });
 

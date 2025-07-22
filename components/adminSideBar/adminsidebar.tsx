@@ -37,6 +37,14 @@ export default function AdminSidebar() {
               Makaleler
             </Link>
           </li>
+          <li>
+            <Link
+              href="/administrator/menus"
+              className="flex items-center px-3 py-2 rounded hover:bg-gray-700 transition"
+            >
+              Menüler
+            </Link>
+          </li>
         </ul>
       </nav>
     </aside>

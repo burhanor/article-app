@@ -4,9 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import StatusSelect from "@/components/selects/status-select";
 import { UpsertButton } from "@/components/buttons/upsertButton";
 
 import { useModal } from "@/hooks/use-modal";
@@ -24,7 +21,8 @@ import {
 } from "@/services/categoryService";
 import { Status } from "@/enums/Status";
 import { showSuccess } from "@/lib/swalHelper";
-import ErrorMessage from "@/components/errorMessage/errorMessage";
+import FormInput from "@/components/form/formInput/formInput";
+import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
 const defaultItem: Category = {
   name: "",
   slug: "",
@@ -97,26 +95,31 @@ export default function CategoryForm({
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <div className="grid gap-3">
-        <Label htmlFor="category">Kategori</Label>
-        <Input type="text" id="category" {...form.register("name")} />
-        <ErrorMessage message={form.formState.errors.name?.message} />
+        <FormInput
+          id="category"
+          label="Kategori"
+          error={form.formState.errors.name}
+          register={form.register("name")}
+        />
       </div>
       <div className="grid gap-3">
-        <Label htmlFor="slug">Slug</Label>
-        <Input type="text" id="slug" {...form.register("slug")} />
-        <ErrorMessage message={form.formState.errors.slug?.message} />
+        <FormInput
+          id="slug"
+          label="Slug"
+          error={form.formState.errors.slug}
+          register={form.register("slug")}
+        />
       </div>
 
       <div className="grid gap-3">
-        <Label htmlFor="status">Durum</Label>
-        <StatusSelect
+        <FormStatusSelect
+          label="Durum"
+          name="status"
           status={form.watch("status") as Status}
-          onChange={(val) => {
-            form.setValue("status", val);
-            form.trigger("status");
-          }}
+          setValue={form.setValue}
+          trigger={form.trigger}
+          error={form.formState.errors.status}
         />
-        <ErrorMessage message={form.formState.errors.status?.message} />
       </div>
 
       <UpsertButton actionType={actionType} />

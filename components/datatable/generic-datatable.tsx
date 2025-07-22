@@ -38,6 +38,7 @@ interface DataTableProps<TData, TValue> {
   onRowSelectionChange: (
     updater: React.SetStateAction<Record<string, boolean>>
   ) => void;
+  enumOptions?: { label: string; value: string }[];
 }
 
 export function GenericDataTable<TData, TValue>({
@@ -46,6 +47,7 @@ export function GenericDataTable<TData, TValue>({
   setDatas,
   rowSelection,
   onRowSelectionChange,
+  enumOptions = statusOptions,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -119,8 +121,8 @@ export function GenericDataTable<TData, TValue>({
                     column.id.charAt(0).toUpperCase() + column.id.slice(1)
                   }
                   options={
-                    column.id === "status"
-                      ? statusOptions
+                    (column.columnDef.meta as ColumnMetaType)?.enumHeader
+                      ? enumOptions
                       : getUniqueOptions(column.id as keyof TData)
                   }
                 />

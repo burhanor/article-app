@@ -24,6 +24,7 @@ export default function TagsPage() {
     store: tagStore,
     deleteFn: deleteTags,
     openModal: modal.openModal,
+    itemLabelKey: "name",
   });
 
   return (

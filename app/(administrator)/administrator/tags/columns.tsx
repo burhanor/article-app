@@ -96,6 +96,7 @@ export const columns: ColumnDef<Tag>[] = [
       className: "col-span-5",
       title: "Durum",
       showHeaderFilter: true,
+      enumHeader: true,
     },
     filterFn: (row, id, value) => {
       return value.toString().includes(row.getValue(id));

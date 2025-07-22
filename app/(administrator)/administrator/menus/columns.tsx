@@ -3,11 +3,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { Category } from "@/models/Category";
-import StatusBadge from "@/components/badges/status-badge";
-import { Status } from "@/enums/Status";
 import { ColumnMetaType } from "@/models/types/ColumnMetaType";
 import { DataTableColumnHeader } from "@/components/datatable/datatable-column-header";
+import { MenuItem } from "@/models/MenuItem";
+import MenuTypeBadge from "@/components/badges/menu-type-badge";
+import { MenuType } from "@/enums/MenuType";
 
 export type CustomColumnDef<TData, TValue = undefined> = ColumnDef<
   TData,
@@ -15,7 +15,7 @@ export type CustomColumnDef<TData, TValue = undefined> = ColumnDef<
 > & {
   meta?: ColumnMetaType;
 };
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<MenuItem>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -42,17 +42,17 @@ export const columns: ColumnDef<Category>[] = [
     },
   },
   {
-    accessorKey: "name",
+    accessorKey: "title",
     header: ({ column }) => {
       return DataTableColumnHeader({
         column,
-        title: "Kategori",
+        title: "Başlık",
       });
     },
-    cell: ({ row }) => <span>{row.getValue("name")}</span>,
+    cell: ({ row }) => <span>{row.getValue("title")}</span>,
     meta: {
-      className: "col-span-22",
-      title: "Kategori",
+      className: "col-span-10",
+      title: "Başlık",
       showHeaderFilter: true,
     },
     filterFn: (row, id, value) => {
@@ -60,21 +60,39 @@ export const columns: ColumnDef<Category>[] = [
     },
   },
   {
-    accessorKey: "slug",
+    accessorKey: "description",
     header: ({ column }) => {
       return DataTableColumnHeader({
         column,
-        title: "Slug",
+        title: "Açıklama",
+      });
+    },
+    cell: ({ row }) => <span>{row.getValue("description")}</span>,
+    meta: {
+      className: "col-span-18",
+      title: "Açıklama",
+      showHeaderFilter: true,
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "link",
+    header: ({ column }) => {
+      return DataTableColumnHeader({
+        column,
+        title: "Link",
       });
     },
     cell: ({ row }) => (
-      <span className={`text-${row.getValue("slug")}`}>
-        {row.getValue("slug")}
+      <span className={`text-${row.getValue("link")}`}>
+        {row.getValue("link")}
       </span>
     ),
     meta: {
-      className: "col-span-22",
-      title: "Slug",
+      className: "col-span-13",
+      title: "Link",
       showHeaderFilter: true,
     },
     filterFn: (row, id, value) => {
@@ -82,19 +100,41 @@ export const columns: ColumnDef<Category>[] = [
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "displayOrder",
     header: ({ column }) => {
       return DataTableColumnHeader({
         column,
-        title: "Durum",
+        title: "Sıralama",
       });
     },
     cell: ({ row }) => (
-      <StatusBadge status={row.getValue("status") as Status} />
+      <span className={`text-${row.getValue("displayOrder")}`}>
+        {row.getValue("displayOrder")}
+      </span>
+    ),
+    meta: {
+      className: "col-span-3",
+      title: "Sıralama",
+      showHeaderFilter: true,
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "menuType",
+    header: ({ column }) => {
+      return DataTableColumnHeader({
+        column,
+        title: "Menü Tipi",
+      });
+    },
+    cell: ({ row }) => (
+      <MenuTypeBadge menuType={row.getValue("menuType") as MenuType} />
     ),
     meta: {
       className: "col-span-5",
-      title: "Durum",
+      title: "Menü Tipi",
       showHeaderFilter: true,
       enumHeader: true,
     },

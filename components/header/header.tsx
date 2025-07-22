@@ -3,7 +3,10 @@ import SearchBar from "../searchBar/searchBar";
 import Logo from "@/public/panda.png";
 import Link from "next/link";
 import Profile from "./profile";
+import { fetchMenuItems } from "@/services/menuItemService";
 export default async function Header() {
+  const menuItems = await fetchMenuItems();
+
   return (
     <header className="bg-gray-800 text-white p-4 fixed h-24 w-full z-2000">
       <div className="flex items-center justify-between">
@@ -15,10 +18,17 @@ export default async function Header() {
       </div>
       <div className="mt-2 flex justify-between items-center">
         <div className="flex space-x-4">
-          <span>1</span>
-          <span>2</span>
-          <span>3</span>
-          <span>4</span>
+          {menuItems &&
+            menuItems.map((item) => (
+              <Link
+                key={item.id}
+                href={item.link}
+                className="text-white hover:text-gray-300 transition-colors"
+                title={item.description}
+              >
+                {item.title}
+              </Link>
+            ))}
         </div>
         <Profile />
       </div>
