@@ -27,7 +27,7 @@ export default async function RootLayout({
       </head>
       <body className={`${merriweather.variable}  antialiased  mx-auto  pr-0`}>
         <Header />
-        <div>{children}</div>
+        <div className="pt-24">{children}</div>
         <Toaster position="top-right" />
       </body>
     </html>

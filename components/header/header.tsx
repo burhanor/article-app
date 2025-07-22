@@ -5,7 +5,7 @@ import Link from "next/link";
 import Profile from "./profile";
 export default async function Header() {
   return (
-    <header className="bg-gray-800 text-white p-4 flex flex-col w-full ">
+    <header className="bg-gray-800 text-white p-4 fixed h-24 w-full ">
       <div className="flex items-center justify-between">
         <Link href="/" className="flex items-center">
           <Image src={Logo} alt="Logo" className="h-8 w-8 mr-4" />

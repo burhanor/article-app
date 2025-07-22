@@ -6,8 +6,8 @@ export default function AdministratorLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      <aside>
+    <div className="flex min-h-[calc(100vh-96px)]">
+      <aside className="">
         <AdminSidebar />
       </aside>
       <main className="flex-1 p-4 bg-gray-100">{children}</main>
