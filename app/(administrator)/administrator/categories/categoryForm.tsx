@@ -24,7 +24,7 @@ import {
   updateCategory as updateCategoryApi,
 } from "@/services/categoryService";
 import { Status } from "@/enums/Status";
-const defaultCategory: Category = {
+const defaultItem: Category = {
   name: "",
   slug: "",
   status: Status.Pending,
@@ -37,20 +37,19 @@ export default function CategoryForm({
   className?: string;
   modal: ReturnType<typeof useModal>;
 }) {
-  const { selectedCategories, actionType, addCategory, updateCategory } =
-    useCategoryStore();
+  const { selectedItems, actionType, addItem, updateItem } = useCategoryStore();
 
-  const selectedCategory =
+  const selectedItem =
     actionType === ActionTypes.UPDATE
-      ? selectedCategories[0] || defaultCategory
-      : defaultCategory;
+      ? selectedItems[0] || defaultItem
+      : defaultItem;
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
-      name: selectedCategory.name || "",
-      slug: selectedCategory.slug || "",
-      status: selectedCategory.status || Status.Pending,
+      name: selectedItem.name || "",
+      slug: selectedItem.slug || "",
+      status: selectedItem.status || Status.Pending,
     },
   });
 
@@ -66,7 +65,7 @@ export default function CategoryForm({
             icon: "success",
             confirmButtonText: "Tamam",
           });
-          addCategory(response.data as Category);
+          addItem(response.data as Category);
           modal.closeModal();
         } else if (response.status === ResponseStatus.ValidationError) {
           handleValidationErrors(form, response.validationErrors);
@@ -76,7 +75,7 @@ export default function CategoryForm({
           );
         }
       } else if (actionType === ActionTypes.UPDATE) {
-        data.id = selectedCategory.id;
+        data.id = selectedItem.id;
         const response = await updateCategoryApi(data);
 
         if (response.status === ResponseStatus.Success) {
@@ -86,7 +85,7 @@ export default function CategoryForm({
             icon: "success",
             confirmButtonText: "Tamam",
           });
-          updateCategory(response.data as Category);
+          updateItem(response.data as Category);
           modal.closeModal();
         } else if (response.status === ResponseStatus.ValidationError) {
           handleValidationErrors(form, response.validationErrors);
