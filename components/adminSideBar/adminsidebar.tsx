@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function AdminSidebar() {
   return (
-    <aside className="w-48 h-full bg-gray-800 text-white flex flex-col pb-6 py-2">
-      <nav>
+    <aside className=" bg-gray-800 text-white flex flex-col pb-6 py-2 h-full">
+      <nav style={{ position: "fixed", top: "96px" }}>
         <ul>
           <li>
             <Link

@@ -6,11 +6,11 @@ export default function AdministratorLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-[calc(100vh-96px)]">
-      <aside className="">
+    <div className="grid grid-cols-24 min-h-[calc(100vh-96px)]">
+      <div className="col-span-2 h-full ">
         <AdminSidebar />
-      </aside>
-      <main className="flex-1 p-4 bg-gray-100">{children}</main>
+      </div>
+      <main className="col-span-22 p-4 bg-gray-100 h-full">{children}</main>
     </div>
   );
 }

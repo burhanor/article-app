@@ -10,43 +10,43 @@ import StatusSelect from "@/components/selects/status-select";
 import { UpsertButton } from "@/components/buttons/upsertButton";
 
 import { useModal } from "@/hooks/use-modal";
-import { useCategoryStore } from "@/stores/categoryStore";
+import { useTagStore } from "@/stores/tagStore";
 
-import { Category } from "@/models/Category";
-import { categorySchema, CategoryFormValues } from "@/schemas/categorySchema";
+import { Tag } from "@/models/Tag";
+import { tagSchema, TagFormValues } from "@/schemas/tagSchema";
 import { ActionTypes } from "@/enums/ActionTypes";
 import { ResponseStatus } from "@/enums/ResponseStatus";
 import { handleValidationErrors } from "@/lib/validationHelper";
 
 import {
-  addCategory as addCategoryApi,
-  updateCategory as updateCategoryApi,
-} from "@/services/categoryService";
+  addTag as addTagApi,
+  updateTag as updateTagApi,
+} from "@/services/tagService";
 import { Status } from "@/enums/Status";
 import { showSuccess } from "@/lib/swalHelper";
 import ErrorMessage from "@/components/errorMessage/errorMessage";
-const defaultItem: Category = {
+const defaultItem: Tag = {
   name: "",
   slug: "",
   status: Status.Pending,
   id: 0,
 };
-export default function CategoryForm({
+export default function TagForm({
   className,
   modal,
 }: {
   className?: string;
   modal: ReturnType<typeof useModal>;
 }) {
-  const { selectedItems, actionType, addItem, updateItem } = useCategoryStore();
+  const { selectedItems, actionType, addItem, updateItem } = useTagStore();
 
   const selectedItem =
     actionType === ActionTypes.UPDATE
       ? selectedItems[0] || defaultItem
       : defaultItem;
 
-  const form = useForm<CategoryFormValues>({
-    resolver: zodResolver(categorySchema),
+  const form = useForm<TagFormValues>({
+    resolver: zodResolver(tagSchema),
     defaultValues: {
       name: selectedItem.name || "",
       slug: selectedItem.slug || "",
@@ -54,35 +54,33 @@ export default function CategoryForm({
     },
   });
 
-  const onSubmit = async (data: CategoryFormValues) => {
+  const onSubmit = async (data: TagFormValues) => {
     try {
       if (actionType === ActionTypes.ADD) {
-        const response = await addCategoryApi(data);
+        const response = await addTagApi(data);
 
         if (response.status === ResponseStatus.Success) {
-          showSuccess("Kategori başarıyla eklendi.");
-          addItem(response.data as Category);
+          showSuccess("Etiket başarıyla eklendi.");
+          addItem(response.data as Tag);
           modal.closeModal();
         } else if (response.status === ResponseStatus.ValidationError) {
           handleValidationErrors(form, response.validationErrors);
         } else {
-          toast.error(
-            response.message || "Kategori eklenirken bir hata oluştu."
-          );
+          toast.error(response.message || "Etiket eklenirken bir hata oluştu.");
         }
       } else if (actionType === ActionTypes.UPDATE) {
         data.id = selectedItem.id;
-        const response = await updateCategoryApi(data);
+        const response = await updateTagApi(data);
 
         if (response.status === ResponseStatus.Success) {
-          showSuccess("Kategori güncellendi.");
-          updateItem(response.data as Category);
+          showSuccess("Etiket güncellendi.");
+          updateItem(response.data as Tag);
           modal.closeModal();
         } else if (response.status === ResponseStatus.ValidationError) {
           handleValidationErrors(form, response.validationErrors);
         } else {
           toast.error(
-            response.message || "Kategori güncellenirken bir hata oluştu."
+            response.message || "Etiket güncellenirken bir hata oluştu."
           );
         }
       }
@@ -97,8 +95,8 @@ export default function CategoryForm({
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <div className="grid gap-3">
-        <Label htmlFor="category">Kategori</Label>
-        <Input type="text" id="category" {...form.register("name")} />
+        <Label htmlFor="tag">Etiket</Label>
+        <Input type="text" id="tag" {...form.register("name")} />
         <ErrorMessage message={form.formState.errors.name?.message} />
       </div>
       <div className="grid gap-3">
