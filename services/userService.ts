@@ -1,0 +1,75 @@
+import { User } from "@/models/User";
+import apiClient from "./client";
+import { ResponseStatus } from "@/enums/ResponseStatus";
+import { ResponseContainer, Unit } from "@/models/types/ResponseContainer";
+import { UserFormValues } from "@/schemas/userSchema";
+
+export async function fetchUsers(): Promise<User[]> {
+  try {
+    const response = await apiClient.get("/user");
+    console.log("Kullanıcılar:", response.data);
+    return response.data.items as User[];
+  } catch (error) {
+    console.error("Kullanıcılar alınırken bir hata oluştu:", error);
+    return [];
+  }
+}
+
+export async function deleteUsers(
+  userIds: number[]
+): Promise<ResponseContainer<Unit>> {
+  try {
+    const response = await apiClient.delete("/user", {
+      data: userIds,
+    });
+    return response.data as ResponseContainer<Unit>;
+  } catch (error) {
+    console.error("Kullanıcılar silinirken bir hata oluştu:", error);
+  }
+  return {
+    status: ResponseStatus.Failed,
+    message: "Kullanıcılar silinirken bir hata oluştu.",
+  } as ResponseContainer<Unit>;
+}
+
+export async function addUser(
+  user: UserFormValues
+): Promise<ResponseContainer<User>> {
+  try {
+    const pascalCaseUser = {
+      Nickname: user.nickname,
+      EmailAddress: user.emailAddress,
+      UserType: user.userType,
+      IsActive: user.isActive,
+      File: null,
+      Password: user.password,
+    };
+    console.log("Kullanıcı ekleniyor:", pascalCaseUser);
+    const response = await apiClient.post("/user", user, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data as ResponseContainer<User>;
+  } catch (error) {
+    console.error("Kullanıcı eklenirken bir hata oluştu:", error);
+    return {
+      status: ResponseStatus.Failed,
+      message: "Kullanıcı eklenirken bir hata oluştu.",
+    } as ResponseContainer<User>;
+  }
+}
+export async function updateUser(
+  user: UserFormValues
+): Promise<ResponseContainer<User>> {
+  try {
+    const response = await apiClient.put(`/user/${user.id}`, user);
+    return response.data as ResponseContainer<User>;
+  } catch (error) {
+    console.error("Kullanıcı güncellenirken bir hata oluştu:", error);
+    return {
+      status: ResponseStatus.Failed,
+      message: "Kullanıcı güncellenirken bir hata oluştu.",
+    } as ResponseContainer<User>;
+  }
+}

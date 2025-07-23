@@ -5,7 +5,9 @@ export function handleValidationErrors<
   TFormValues extends Record<string, unknown>
 >(form: UseFormReturn<TFormValues>, validationErrors: ValidationError[]) {
   for (const error of validationErrors) {
-    form.setError(error.propertyName.toLowerCase() as Path<TFormValues>, {
+    const fieldName =
+      error.propertyName.charAt(0).toLowerCase() + error.propertyName.slice(1);
+    form.setError(fieldName as Path<TFormValues>, {
       type: "manual",
       message: error.errorMessage,
     });
