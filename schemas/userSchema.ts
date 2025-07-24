@@ -14,10 +14,8 @@ export const userSchema = z
       .max(50, "Kullanıcı adı 50 karakterden uzun olamaz"),
     password: z.string().optional(),
     isActive: z.boolean(),
-    avatar: z
-      .instanceof(File)
-      .optional()
-      .refine((file) => !file || file.size > 0, "Dosya boş olamaz"),
+    avatar: z.any().optional(),
+
     userType: z.nativeEnum(UserType),
   })
   .superRefine((data, ctx) => {

@@ -9,3 +9,13 @@ export interface User {
   isActive: boolean;
   userType: UserType;
 }
+
+export interface UserRequestDto {
+  id: number;
+  emailAddress: string;
+  nickname: string;
+  isActive: boolean;
+  password: string;
+  userType: UserType;
+  file: File | null;
+}

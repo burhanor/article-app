@@ -3,7 +3,7 @@ import AdminCrudButton from "@/components/adminCrudButton/admin-crud-button";
 import { columns } from "./columns";
 import { deleteCategories, fetchCategories } from "@/services/categoryService";
 import { useCategoryStore } from "@/stores/categoryStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useModal } from "@/hooks/use-modal";
 import UpsertModal from "@/components/modals/upsertModal/upsertModal";
@@ -13,14 +13,13 @@ import { GenericDataTable } from "@/components/datatable/generic-datatable";
 import { useCrudHandlers } from "@/hooks/useCrudHandlers";
 
 export default function CategoriesPage() {
-  const [rowSelection, setRowSelection] = useState({});
   const modal = useModal();
   const categoryStore = useCategoryStore();
   useEffect(() => {
     fetchCategories().then(categoryStore.setItems);
   }, []);
 
-  const { handleCrud, title } = useCrudHandlers({
+  const { handleCrud, title, rowSelection, setRowSelection } = useCrudHandlers({
     entityName: "Kategori",
     store: categoryStore,
     deleteFn: deleteCategories,

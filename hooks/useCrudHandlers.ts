@@ -14,6 +14,8 @@ interface CrudHandlersOptions<T> {
     selectedItems: T[];
     deleteItem: (ids: number[]) => void;
     setActionType: (type: ActionTypes) => void;
+
+    setSelectedItems: (items: T[]) => void;
   };
   deleteFn: (
     ids: number[]
@@ -30,6 +32,8 @@ export function useCrudHandlers<T extends { id: number }>({
   itemLabelKey,
 }: CrudHandlersOptions<T>) {
   const [title, setTitle] = useState("Kategori İşlemleri");
+
+  const [rowSelection, setRowSelection] = useState({});
   const handleDelete = async () => {
     const selectedItems = store.selectedItems;
     if (selectedItems.length === 0) {
@@ -50,6 +54,7 @@ export function useCrudHandlers<T extends { id: number }>({
       if (response.status === ResponseStatus.Success) {
         showSuccess(`${entityName}ler başarıyla silindi.`);
         store.deleteItem(ids);
+        setRowSelection({});
       } else {
         showError(
           response.message || `${entityName}ler silinirken bir hata oluştu.`
@@ -98,6 +103,8 @@ export function useCrudHandlers<T extends { id: number }>({
   };
 
   return {
+    rowSelection,
+    setRowSelection,
     handleAdd,
     handleUpdate,
     handleDelete,

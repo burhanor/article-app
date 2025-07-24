@@ -1,7 +1,7 @@
 "use client";
 import AdminCrudButton from "@/components/adminCrudButton/admin-crud-button";
 import { columns } from "./columns";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useModal } from "@/hooks/use-modal";
 import UpsertModal from "@/components/modals/upsertModal/upsertModal";
 import { GenericDataTable } from "@/components/datatable/generic-datatable";
@@ -12,14 +12,13 @@ import { useUserStore } from "@/stores/userStore";
 import { deleteUsers, fetchUsers } from "@/services/userService";
 
 export default function UsersPage() {
-  const [rowSelection, setRowSelection] = useState({});
   const modal = useModal();
   const userStore = useUserStore();
 
   useEffect(() => {
     fetchUsers().then(userStore.setItems);
   }, []);
-  const { handleCrud, title } = useCrudHandlers({
+  const { handleCrud, title, rowSelection, setRowSelection } = useCrudHandlers({
     entityName: "Kullanıcı",
     store: userStore,
     deleteFn: deleteUsers,

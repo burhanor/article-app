@@ -1,7 +1,7 @@
 "use client";
 import AdminCrudButton from "@/components/adminCrudButton/admin-crud-button";
 import { columns } from "./columns";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useModal } from "@/hooks/use-modal";
 import UpsertModal from "@/components/modals/upsertModal/upsertModal";
@@ -14,14 +14,13 @@ import { useMenuStore } from "@/stores/menuStore";
 import { menuTypeOptions } from "@/lib/enumHelper";
 
 export default function MenuPage() {
-  const [rowSelection, setRowSelection] = useState({});
   const modal = useModal();
   const menuStore = useMenuStore();
   useEffect(() => {
     fetchMenuItems().then(menuStore.setItems);
   }, []);
 
-  const { handleCrud, title } = useCrudHandlers({
+  const { handleCrud, title, rowSelection, setRowSelection } = useCrudHandlers({
     entityName: "Menü",
     store: menuStore,
     deleteFn: deleteMenuItems,

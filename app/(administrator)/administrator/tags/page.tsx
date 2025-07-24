@@ -3,7 +3,7 @@ import AdminCrudButton from "@/components/adminCrudButton/admin-crud-button";
 import { columns } from "./columns";
 import { deleteTags, fetchTags } from "@/services/tagService";
 import { useTagStore } from "@/stores/tagStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useModal } from "@/hooks/use-modal";
 import UpsertModal from "@/components/modals/upsertModal/upsertModal";
 import TagForm from "./tagForm";
@@ -12,14 +12,13 @@ import { GenericDataTable } from "@/components/datatable/generic-datatable";
 import { useCrudHandlers } from "@/hooks/useCrudHandlers";
 
 export default function TagsPage() {
-  const [rowSelection, setRowSelection] = useState({});
   const modal = useModal();
   const tagStore = useTagStore();
 
   useEffect(() => {
     fetchTags().then(tagStore.setItems);
   }, []);
-  const { handleCrud, title } = useCrudHandlers({
+  const { handleCrud, title, rowSelection, setRowSelection } = useCrudHandlers({
     entityName: "Etiket",
     store: tagStore,
     deleteFn: deleteTags,

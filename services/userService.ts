@@ -1,4 +1,4 @@
-import { User } from "@/models/User";
+import { User, UserRequestDto } from "@/models/User";
 import apiClient from "./client";
 import { ResponseStatus } from "@/enums/ResponseStatus";
 import { ResponseContainer, Unit } from "@/models/types/ResponseContainer";
@@ -36,16 +36,16 @@ export async function addUser(
   user: UserFormValues
 ): Promise<ResponseContainer<User>> {
   try {
-    const pascalCaseUser = {
-      Nickname: user.nickname,
-      EmailAddress: user.emailAddress,
-      UserType: user.userType,
-      IsActive: user.isActive,
-      File: null,
-      Password: user.password,
+    const request: UserRequestDto = {
+      id: user.id || 0,
+      emailAddress: user.emailAddress,
+      nickname: user.nickname,
+      isActive: user.isActive,
+      userType: user.userType,
+      password: user.password || "",
+      file: user.avatar || null,
     };
-    console.log("Kullanıcı ekleniyor:", pascalCaseUser);
-    const response = await apiClient.post("/user", user, {
+    const response = await apiClient.post("/user", request, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -63,7 +63,20 @@ export async function updateUser(
   user: UserFormValues
 ): Promise<ResponseContainer<User>> {
   try {
-    const response = await apiClient.put(`/user/${user.id}`, user);
+    const request: UserRequestDto = {
+      id: user.id || 0,
+      emailAddress: user.emailAddress,
+      nickname: user.nickname,
+      isActive: user.isActive,
+      userType: user.userType,
+      password: user.password || "",
+      file: user.avatar || null,
+    };
+    const response = await apiClient.put(`/user/${user.id}`, request, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data as ResponseContainer<User>;
   } catch (error) {
     console.error("Kullanıcı güncellenirken bir hata oluştu:", error);
