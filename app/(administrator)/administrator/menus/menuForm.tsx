@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { UpsertButton } from "@/components/buttons/upsertButton";
@@ -9,10 +8,6 @@ import { UpsertButton } from "@/components/buttons/upsertButton";
 import { useModal } from "@/hooks/use-modal";
 
 import { ActionTypes } from "@/enums/ActionTypes";
-import { ResponseStatus } from "@/enums/ResponseStatus";
-import { handleValidationErrors } from "@/lib/validationHelper";
-
-import { showSuccess } from "@/lib/swalHelper";
 import FormInput from "@/components/form/formInput/formInput";
 import { addMenuItem, updateMenuItem } from "@/services/menuItemService";
 import { MenuItem } from "@/models/MenuItem";
@@ -22,6 +17,7 @@ import { useMenuStore } from "@/stores/menuStore";
 import { Label } from "@/components/ui/label";
 import ErrorMessage from "@/components/errorMessage/errorMessage";
 import MenuTypeSelect from "@/components/selects/menu-type-select";
+import { handleFormSubmit } from "@/lib/formHelper";
 const defaultItem: MenuItem = {
   id: 0,
   title: "",
@@ -56,40 +52,29 @@ export default function MenuForm({
   });
 
   const onSubmit = async (data: MenuItemFormValues) => {
-    try {
-      if (actionType === ActionTypes.ADD) {
-        const response = await addMenuItem(data);
-
-        if (response.status === ResponseStatus.Success) {
-          showSuccess("Kategori başarıyla eklendi.");
-          addItem(response.data as MenuItem);
-          modal.closeModal();
-        } else if (response.status === ResponseStatus.ValidationError) {
-          handleValidationErrors(form, response.validationErrors);
+    await handleFormSubmit<MenuItem, MenuItemFormValues>({
+      data,
+      actionType,
+      selectedItem,
+      addApi: addMenuItem,
+      updateApi: updateMenuItem,
+      onSuccess: (result) => {
+        if (actionType === ActionTypes.ADD) {
+          addItem(result);
         } else {
-          toast.error(
-            response.message || "Kategori eklenirken bir hata oluştu."
-          );
+          updateItem(result);
         }
-      } else if (actionType === ActionTypes.UPDATE) {
-        data.id = selectedItem.id;
-        const response = await updateMenuItem(data);
-
-        if (response.status === ResponseStatus.Success) {
-          showSuccess("Kategori güncellendi.");
-          updateItem(response.data as MenuItem);
-          modal.closeModal();
-        } else if (response.status === ResponseStatus.ValidationError) {
-          handleValidationErrors(form, response.validationErrors);
-        } else {
-          toast.error(
-            response.message || "Kategori güncellenirken bir hata oluştu."
-          );
-        }
-      }
-    } catch {
-      toast.error("Sunucuya bağlanırken bir hata oluştu.");
-    }
+        return;
+      },
+      form,
+      modal,
+      messages: {
+        add: "Menü başarıyla eklendi.",
+        update: "Menü güncellendi.",
+        errorAdd: "Menü eklenirken bir hata oluştu.",
+        errorUpdate: "Menü güncellenirken bir hata oluştu.",
+      },
+    });
   };
 
   return (

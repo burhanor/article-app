@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 
 import { cn, getAvatarUrl } from "@/lib/utils";
 import { UpsertButton } from "@/components/buttons/upsertButton";
@@ -12,14 +11,8 @@ import { useUserStore } from "@/stores/userStore";
 import { User } from "@/models/User";
 import { userSchema, UserFormValues } from "@/schemas/userSchema";
 import { ActionTypes } from "@/enums/ActionTypes";
-import { ResponseStatus } from "@/enums/ResponseStatus";
-import { handleValidationErrors } from "@/lib/validationHelper";
 
-import {
-  addUser as addUserApi,
-  updateUser as updateUserApi,
-} from "@/services/userService";
-import { showSuccess } from "@/lib/swalHelper";
+import { addUser, updateUser } from "@/services/userService";
 import FormInput from "@/components/form/formInput/formInput";
 import { UserType } from "@/enums/UserType";
 import FormUserType from "@/components/form/formUserType/formUserType";
@@ -28,6 +21,7 @@ import ErrorMessage from "@/components/errorMessage/errorMessage";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import ImageUploadPreview from "@/components/imageUploads/image-upload-preview";
+import { handleFormSubmit } from "@/lib/formHelper";
 const defaultItem: User = {
   nickname: "",
   emailAddress: "",
@@ -73,41 +67,29 @@ export default function UserForm({
 
   const onSubmit = async (data: UserFormValues) => {
     data.avatar = selectedImage;
-    console.log("Form data:", data);
-    try {
-      if (actionType === ActionTypes.ADD) {
-        const response = await addUserApi(data);
-
-        if (response.status === ResponseStatus.Success) {
-          showSuccess("Kullanıcı başarıyla eklendi.");
-          addItem(response.data as User);
-          modal.closeModal();
-        } else if (response.status === ResponseStatus.ValidationError) {
-          handleValidationErrors(form, response.validationErrors);
+    await handleFormSubmit<User, UserFormValues>({
+      data,
+      actionType,
+      selectedItem,
+      addApi: addUser,
+      updateApi: updateUser,
+      onSuccess: (result) => {
+        if (actionType === ActionTypes.ADD) {
+          addItem(result);
         } else {
-          toast.error(
-            response.message || "Kullanıcı eklenirken bir hata oluştu."
-          );
+          updateItem(result);
         }
-      } else if (actionType === ActionTypes.UPDATE) {
-        data.id = selectedItem.id;
-        const response = await updateUserApi(data);
-
-        if (response.status === ResponseStatus.Success) {
-          showSuccess("Kullanıcı güncellendi.");
-          updateItem(response.data as User);
-          modal.closeModal();
-        } else if (response.status === ResponseStatus.ValidationError) {
-          handleValidationErrors(form, response.validationErrors);
-        } else {
-          toast.error(
-            response.message || "Kullanıcı güncellenirken bir hata oluştu."
-          );
-        }
-      }
-    } catch {
-      toast.error("Sunucuya bağlanırken bir hata oluştu.");
-    }
+        return;
+      },
+      form,
+      modal,
+      messages: {
+        add: "Kullanıcı başarıyla eklendi.",
+        update: "Kullanıcı güncellendi.",
+        errorAdd: "Kullanıcı eklenirken bir hata oluştu.",
+        errorUpdate: "Kullanıcı güncellenirken bir hata oluştu.",
+      },
+    });
   };
 
   return (

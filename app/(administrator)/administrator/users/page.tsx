@@ -25,7 +25,6 @@ export default function UsersPage() {
     openModal: modal.openModal,
     itemLabelKey: "nickname",
   });
-
   return (
     <>
       <AdminCrudButton handleCrud={handleCrud} />

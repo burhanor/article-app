@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { UpsertButton } from "@/components/buttons/upsertButton";
@@ -12,17 +11,15 @@ import { useCategoryStore } from "@/stores/categoryStore";
 import { Category } from "@/models/Category";
 import { categorySchema, CategoryFormValues } from "@/schemas/categorySchema";
 import { ActionTypes } from "@/enums/ActionTypes";
-import { ResponseStatus } from "@/enums/ResponseStatus";
-import { handleValidationErrors } from "@/lib/validationHelper";
 
 import {
   addCategory as addCategoryApi,
   updateCategory as updateCategoryApi,
 } from "@/services/categoryService";
 import { Status } from "@/enums/Status";
-import { showSuccess } from "@/lib/swalHelper";
 import FormInput from "@/components/form/formInput/formInput";
 import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
+import { handleFormSubmit } from "@/lib/formHelper";
 const defaultItem: Category = {
   name: "",
   slug: "",
@@ -52,41 +49,66 @@ export default function CategoryForm({
     },
   });
 
+  //   try {
+  //     if (actionType === ActionTypes.ADD) {
+  //       const response = await addCategoryApi(data);
+
+  //       if (response.status === ResponseStatus.Success) {
+  //         showSuccess("Kategori başarıyla eklendi.");
+  //         addItem(response.data as Category);
+  //         modal.closeModal();
+  //       } else if (response.status === ResponseStatus.ValidationError) {
+  //         handleValidationErrors(form, response.validationErrors);
+  //       } else {
+  //         toast.error(
+  //           response.message || "Kategori eklenirken bir hata oluştu."
+  //         );
+  //       }
+  //     } else if (actionType === ActionTypes.UPDATE) {
+  //       data.id = selectedItem.id;
+  //       const response = await updateCategoryApi(data);
+
+  //       if (response.status === ResponseStatus.Success) {
+  //         showSuccess("Kategori güncellendi.");
+  //         updateItem(response.data as Category);
+  //         modal.closeModal();
+  //       } else if (response.status === ResponseStatus.ValidationError) {
+  //         handleValidationErrors(form, response.validationErrors);
+  //       } else {
+  //         toast.error(
+  //           response.message || "Kategori güncellenirken bir hata oluştu."
+  //         );
+  //       }
+  //     }
+  //   } catch {
+  //     toast.error("Sunucuya bağlanırken bir hata oluştu.");
+  //   }
+  // };
+
   const onSubmit = async (data: CategoryFormValues) => {
-    try {
-      if (actionType === ActionTypes.ADD) {
-        const response = await addCategoryApi(data);
-
-        if (response.status === ResponseStatus.Success) {
-          showSuccess("Kategori başarıyla eklendi.");
-          addItem(response.data as Category);
-          modal.closeModal();
-        } else if (response.status === ResponseStatus.ValidationError) {
-          handleValidationErrors(form, response.validationErrors);
+    await handleFormSubmit<Category, CategoryFormValues>({
+      data,
+      actionType,
+      selectedItem,
+      addApi: addCategoryApi,
+      updateApi: updateCategoryApi,
+      onSuccess: (result) => {
+        if (actionType === ActionTypes.ADD) {
+          addItem(result);
         } else {
-          toast.error(
-            response.message || "Kategori eklenirken bir hata oluştu."
-          );
+          updateItem(result);
         }
-      } else if (actionType === ActionTypes.UPDATE) {
-        data.id = selectedItem.id;
-        const response = await updateCategoryApi(data);
-
-        if (response.status === ResponseStatus.Success) {
-          showSuccess("Kategori güncellendi.");
-          updateItem(response.data as Category);
-          modal.closeModal();
-        } else if (response.status === ResponseStatus.ValidationError) {
-          handleValidationErrors(form, response.validationErrors);
-        } else {
-          toast.error(
-            response.message || "Kategori güncellenirken bir hata oluştu."
-          );
-        }
-      }
-    } catch {
-      toast.error("Sunucuya bağlanırken bir hata oluştu.");
-    }
+        return;
+      },
+      form,
+      modal,
+      messages: {
+        add: "Kategori başarıyla eklendi.",
+        update: "Kategori güncellendi.",
+        errorAdd: "Kategori eklenirken bir hata oluştu.",
+        errorUpdate: "Kategori güncellenirken bir hata oluştu.",
+      },
+    });
   };
 
   return (

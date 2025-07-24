@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { UpsertButton } from "@/components/buttons/upsertButton";
@@ -12,17 +11,12 @@ import { useTagStore } from "@/stores/tagStore";
 import { Tag } from "@/models/Tag";
 import { tagSchema, TagFormValues } from "@/schemas/tagSchema";
 import { ActionTypes } from "@/enums/ActionTypes";
-import { ResponseStatus } from "@/enums/ResponseStatus";
-import { handleValidationErrors } from "@/lib/validationHelper";
 
-import {
-  addTag as addTagApi,
-  updateTag as updateTagApi,
-} from "@/services/tagService";
+import { addTag, updateTag } from "@/services/tagService";
 import { Status } from "@/enums/Status";
-import { showSuccess } from "@/lib/swalHelper";
 import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
 import FormInput from "@/components/form/formInput/formInput";
+import { handleFormSubmit } from "@/lib/formHelper";
 const defaultItem: Tag = {
   name: "",
   slug: "",
@@ -53,38 +47,29 @@ export default function TagForm({
   });
 
   const onSubmit = async (data: TagFormValues) => {
-    try {
-      if (actionType === ActionTypes.ADD) {
-        const response = await addTagApi(data);
-
-        if (response.status === ResponseStatus.Success) {
-          showSuccess("Etiket başarıyla eklendi.");
-          addItem(response.data as Tag);
-          modal.closeModal();
-        } else if (response.status === ResponseStatus.ValidationError) {
-          handleValidationErrors(form, response.validationErrors);
+    await handleFormSubmit<Tag, TagFormValues>({
+      data,
+      actionType,
+      selectedItem,
+      addApi: addTag,
+      updateApi: updateTag,
+      onSuccess: (result) => {
+        if (actionType === ActionTypes.ADD) {
+          addItem(result);
         } else {
-          toast.error(response.message || "Etiket eklenirken bir hata oluştu.");
+          updateItem(result);
         }
-      } else if (actionType === ActionTypes.UPDATE) {
-        data.id = selectedItem.id;
-        const response = await updateTagApi(data);
-
-        if (response.status === ResponseStatus.Success) {
-          showSuccess("Etiket güncellendi.");
-          updateItem(response.data as Tag);
-          modal.closeModal();
-        } else if (response.status === ResponseStatus.ValidationError) {
-          handleValidationErrors(form, response.validationErrors);
-        } else {
-          toast.error(
-            response.message || "Etiket güncellenirken bir hata oluştu."
-          );
-        }
-      }
-    } catch {
-      toast.error("Sunucuya bağlanırken bir hata oluştu.");
-    }
+        return;
+      },
+      form,
+      modal,
+      messages: {
+        add: "Etiket başarıyla eklendi.",
+        update: "Etiket güncellendi.",
+        errorAdd: "Etiket eklenirken bir hata oluştu.",
+        errorUpdate: "Etiket güncellenirken bir hata oluştu.",
+      },
+    });
   };
 
   return (
