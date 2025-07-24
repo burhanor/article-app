@@ -4,5 +4,6 @@ export default async function CategoriesPage({
   params: { slug: string };
 }) {
   const { slug } = await params;
+
   return <div>CategoriesPage - {slug}</div>;
 }
