@@ -11,3 +11,16 @@ export function getAvatarUrl(avatarPath: string | null | undefined): string {
   }
   return `${process.env.NEXT_PUBLIC_IMAGE_URL}${avatarPath}`;
 }
+
+export function formatDate(date: string | null): string {
+  if (!date) return "";
+  console.log("Tarih:", date);
+  //dd.MM.yyyy
+
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  };
+  return new Date(date).toLocaleDateString("tr-TR", options);
+}

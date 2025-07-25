@@ -13,3 +13,7 @@ export interface Article {
   categories: CategoryDto[];
   tags: TagDto[];
 }
+
+export interface ArticleDto extends Article {
+  nickname: string;
+}

@@ -3,6 +3,7 @@ import apiClient from "./client";
 import { ResponseStatus } from "@/enums/ResponseStatus";
 import { ResponseContainer, Unit } from "@/models/types/ResponseContainer";
 import { UserFormValues } from "@/schemas/userSchema";
+import { UserNickname } from "@/models/UserNickname";
 
 export async function fetchUsers(): Promise<User[]> {
   try {
@@ -11,6 +12,17 @@ export async function fetchUsers(): Promise<User[]> {
     return response.data.items as User[];
   } catch (error) {
     console.error("Kullanıcılar alınırken bir hata oluştu:", error);
+    return [];
+  }
+}
+
+export async function getNicknames(userIds: number[]): Promise<UserNickname[]> {
+  try {
+    const response = await apiClient.post("/user/nicknames", userIds);
+    console.log("Nicknames:", response.data);
+    return response.data as UserNickname[];
+  } catch (error) {
+    console.error("Nicknames alınırken bir hata oluştu:", error);
     return [];
   }
 }
