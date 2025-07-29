@@ -26,6 +26,7 @@ import { tinyMCEConfig } from "@/lib/tinyMCEConfig";
 import MultiSelectInput, {
   SelectItem,
 } from "@/components/form/multiSelectInput/multiSelectInput";
+import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
 
 const defaultItem: ArticleDto = {
   title: "",
@@ -67,6 +68,7 @@ export default function ArticleForm({
   }, []);
 
   const onSubmit = async (data: ArticleFormValues) => {
+    console.log("Form submitted with data:", data);
     await handleFormSubmit<ArticleDto, ArticleFormValues>({
       data,
       actionType,
@@ -74,6 +76,7 @@ export default function ArticleForm({
       addApi: addArticle,
       updateApi: updateArticle,
       onSuccess: (result) => {
+        console.log("Form submission successful:", result);
         if (actionType === ActionTypes.ADD) {
           addItem(result);
         } else {
@@ -107,7 +110,6 @@ export default function ArticleForm({
       content: selectedItem.content || "",
       categories: selectedItem.categories.map((c) => c.name) || [],
       tags: selectedItem.tags.map((t) => t.name) || [],
-      publishDate: selectedItem.publishDate || undefined,
       id: selectedItem.id || 0,
     },
   });
@@ -169,9 +171,9 @@ export default function ArticleForm({
       </div>
       <div className="flex-1 overflow-auto">
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             {/* Title Field */}
-            <div className="space-y-2">
+            <div className="space-y-2 lg:col-span-2 col-span-1">
               <FormInput
                 id="title"
                 label="Başlık *"
@@ -181,12 +183,23 @@ export default function ArticleForm({
             </div>
 
             {/* Slug Field */}
-            <div className="space-y-2">
+            <div className="space-y-2 lg:col-span-2 col-span-1">
               <FormInput
                 id="slug"
                 label="Slug *"
                 error={form.formState.errors.slug}
                 register={form.register("slug")}
+              />
+            </div>
+
+            <div className="grid gap-3">
+              <FormStatusSelect
+                label="Durum"
+                name="status"
+                status={form.watch("status") as Status}
+                setValue={form.setValue}
+                trigger={form.trigger}
+                error={form.formState.errors.status}
               />
             </div>
           </div>
@@ -232,6 +245,14 @@ export default function ArticleForm({
           </div>
 
           {/* Form Actions */}
+          {/**Show all errors */}
+          {form.formState.errors && (
+            <ErrorMessage
+              message={Object.values(form.formState.errors)
+                .map((error) => error.message)
+                .join(", ")}
+            />
+          )}
           <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
             <Button type="submit" className="flex-1 sm:flex-none">
               İçeriği Kaydet

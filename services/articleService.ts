@@ -57,6 +57,10 @@ export async function fetchArticles(): Promise<ArticleDto[]> {
       // Map user nicknames to articles
       articles.forEach((article) => {
         const user = users.find((u) => u.id === article.userId);
+        if (article.publishDate) {
+          const publishDate = new Date(article.publishDate);
+          article.publishDate = publishDate;
+        }
         if (user) {
           article.nickname = user.nickname;
         } else {
