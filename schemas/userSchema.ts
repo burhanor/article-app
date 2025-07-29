@@ -14,7 +14,7 @@ export const userSchema = z
       .max(50, "Kullanıcı adı 50 karakterden uzun olamaz"),
     password: z.string().optional(),
     isActive: z.boolean(),
-    avatar: z.any().optional(),
+    file: z.any().optional(),
 
     userType: z.nativeEnum(UserType),
   })

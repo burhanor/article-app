@@ -12,14 +12,11 @@ import { Category } from "@/models/Category";
 import { categorySchema, CategoryFormValues } from "@/schemas/categorySchema";
 import { ActionTypes } from "@/enums/ActionTypes";
 
-import {
-  addCategory as addCategoryApi,
-  updateCategory as updateCategoryApi,
-} from "@/services/categoryService";
 import { Status } from "@/enums/Status";
 import FormInput from "@/components/form/formInput/formInput";
 import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
 import { handleFormSubmit } from "@/lib/formHelper";
+import categoryService from "@/services/categoryService";
 const defaultItem: Category = {
   name: "",
   slug: "",
@@ -90,8 +87,8 @@ export default function CategoryForm({
       data,
       actionType,
       selectedItem,
-      addApi: addCategoryApi,
-      updateApi: updateCategoryApi,
+      addApi: categoryService.add,
+      updateApi: categoryService.update,
       onSuccess: (result) => {
         if (actionType === ActionTypes.ADD) {
           addItem(result);

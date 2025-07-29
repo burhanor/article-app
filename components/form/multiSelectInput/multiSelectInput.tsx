@@ -95,7 +95,6 @@ export default function MultiSelectInput({
       !selectedItems.find((st) => st.name === item.name) &&
       item.name.toLowerCase().includes(itemSearch.toLowerCase())
   );
-  console.log("availableItems", availableItems, allItems, initData);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

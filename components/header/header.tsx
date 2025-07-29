@@ -3,9 +3,9 @@ import SearchBar from "../searchBar/searchBar";
 import Logo from "@/public/panda.png";
 import Link from "next/link";
 import Profile from "./profile";
-import { fetchMenuItems } from "@/services/menuItemService";
+import menuService from "@/services/menuItemService";
 export default async function Header() {
-  const menuItems = await fetchMenuItems();
+  const menuItems = await menuService.fetchAll();
 
   return (
     <header className="bg-gray-800 text-white p-4 fixed h-24 w-full z-2000">

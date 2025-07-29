@@ -6,17 +6,12 @@ import {
   showSuccess,
   showWarning,
 } from "@/lib/swalHelper";
+import { GenericStore } from "@/stores/genericStore";
 import { useState } from "react";
 
 interface CrudHandlersOptions<T> {
   entityName: string;
-  store: {
-    selectedItems: T[];
-    deleteItem: (ids: number[]) => void;
-    setActionType: (type: ActionTypes) => void;
-
-    setSelectedItems: (items: T[]) => void;
-  };
+  store: GenericStore<T>;
   deleteFn: (
     ids: number[]
   ) => Promise<{ status: ResponseStatus; message?: string }>;

@@ -9,7 +9,7 @@ import { useModal } from "@/hooks/use-modal";
 
 import { ActionTypes } from "@/enums/ActionTypes";
 import FormInput from "@/components/form/formInput/formInput";
-import { addMenuItem, updateMenuItem } from "@/services/menuItemService";
+import menuService from "@/services/menuItemService";
 import { MenuItem } from "@/models/MenuItem";
 import { MenuType } from "@/enums/MenuType";
 import { MenuItemFormValues, menuSchema } from "@/schemas/menuItemSchema";
@@ -56,8 +56,8 @@ export default function MenuForm({
       data,
       actionType,
       selectedItem,
-      addApi: addMenuItem,
-      updateApi: updateMenuItem,
+      addApi: menuService.add,
+      updateApi: menuService.update,
       onSuccess: (result) => {
         if (actionType === ActionTypes.ADD) {
           addItem(result);

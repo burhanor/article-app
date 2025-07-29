@@ -8,5 +8,35 @@
     "title": "Hakkımızda Başlığı",
     "description": "Hakkımızda sayfası açıklaması.",
     "keywords": "hakkımızda, bilgi"
+  },
+  "administrator.dashboard": {
+    "title": "Yönetici Paneli",
+    "description": "Yönetici paneli açıklaması.",
+    "keywords": "yönetici, panel, admin"
+  },
+  "administrator.categories": {
+    "title": "Kategoriler",
+    "description": "Yönetici kategorileri sayfası.",
+    "keywords": "kategoriler, yönetici"
+  },
+  "administrator.menus": {
+    "title": "Menüler",
+    "description": "Yönetici menüleri sayfası.",
+    "keywords": "menüler, yönetici"
+  },
+  "administrator.tags": {
+    "title": "Etiketler",
+    "description": "Yönetici etiketleri sayfası.",
+    "keywords": "etiketler, yönetici"
+  },
+  "administrator.users": {
+    "title": "Kullanıcılar",
+    "description": "Yönetici kullanıcıları sayfası.",
+    "keywords": "kullanıcılar, yönetici"
+  },
+  "administrator.articles": {
+    "title": "Makaleler",
+    "description": "Yönetici makaleleri sayfası.",
+    "keywords": "makaleler, yönetici"
   }
 }

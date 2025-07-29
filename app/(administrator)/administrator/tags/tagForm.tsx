@@ -12,7 +12,7 @@ import { Tag } from "@/models/Tag";
 import { tagSchema, TagFormValues } from "@/schemas/tagSchema";
 import { ActionTypes } from "@/enums/ActionTypes";
 
-import { addTag, updateTag } from "@/services/tagService";
+import tagService from "@/services/tagService";
 import { Status } from "@/enums/Status";
 import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
 import FormInput from "@/components/form/formInput/formInput";
@@ -51,8 +51,8 @@ export default function TagForm({
       data,
       actionType,
       selectedItem,
-      addApi: addTag,
-      updateApi: updateTag,
+      addApi: tagService.add,
+      updateApi: tagService.update,
       onSuccess: (result) => {
         if (actionType === ActionTypes.ADD) {
           addItem(result);

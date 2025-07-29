@@ -12,7 +12,7 @@ import { User } from "@/models/User";
 import { userSchema, UserFormValues } from "@/schemas/userSchema";
 import { ActionTypes } from "@/enums/ActionTypes";
 
-import { addUser, updateUser } from "@/services/userService";
+import userService from "@/services/userService";
 import FormInput from "@/components/form/formInput/formInput";
 import { UserType } from "@/enums/UserType";
 import FormUserType from "@/components/form/formUserType/formUserType";
@@ -59,20 +59,20 @@ export default function UserForm({
       emailAddress: selectedItem.emailAddress || defaultItem.emailAddress,
       userType: selectedItem.userType || defaultItem.userType,
       isActive: selectedItem.isActive || defaultItem.isActive,
-      avatar: undefined,
+      file: undefined,
       password: "",
       id: selectedItem.id || defaultItem.id,
     },
   });
 
   const onSubmit = async (data: UserFormValues) => {
-    data.avatar = selectedImage;
+    data.file = selectedImage;
     await handleFormSubmit<User, UserFormValues>({
       data,
       actionType,
       selectedItem,
-      addApi: addUser,
-      updateApi: updateUser,
+      addApi: userService.add,
+      updateApi: userService.update,
       onSuccess: (result) => {
         if (actionType === ActionTypes.ADD) {
           addItem(result);

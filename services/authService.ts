@@ -14,9 +14,7 @@ export async function Login(
       password: password,
     });
     const status = response.data.status;
-    console.log("Status", status);
-    console.log("Response data:", response.data);
-    console.log("Giriş bilgileri:", { nickname: email, password: password });
+
     if (status === ResponseStatus.Success) {
       const accessToken = response.data.data.accessToken;
       const tokenPayload = readToken(accessToken);
@@ -32,7 +30,6 @@ export async function Logout(): Promise<boolean> {
   try {
     const logoutUrl = process.env.NEXT_PUBLIC_API_BASE_URL + "/Auth/logout";
     await apiClient.post(logoutUrl);
-    console.log("Başarıyla çıkış yapıldı.");
     return true;
   } catch (error) {
     console.error("Çıkış işlemi sırasında bir hata oluştu:", error);

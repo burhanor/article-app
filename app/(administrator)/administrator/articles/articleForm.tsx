@@ -9,8 +9,6 @@ import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useModal } from "@/hooks/use-modal";
-import { fetchCategories } from "@/services/categoryService";
-import { fetchTags } from "@/services/tagService";
 import { useArticleStore } from "@/stores/articleStore";
 import { ActionTypes } from "@/enums/ActionTypes";
 import { Status } from "@/enums/Status";
@@ -21,12 +19,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/form/formInput/formInput";
 import ErrorMessage from "@/components/errorMessage/errorMessage";
 import { handleFormSubmit } from "@/lib/formHelper";
-import { addArticle, updateArticle } from "@/services/articleService";
+import articleService from "@/services/articleService";
 import { tinyMCEConfig } from "@/lib/tinyMCEConfig";
 import MultiSelectInput, {
   SelectItem,
 } from "@/components/form/multiSelectInput/multiSelectInput";
 import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
+import tagService from "@/services/tagService";
+import categoryService from "@/services/categoryService";
 
 const defaultItem: ArticleDto = {
   title: "",
@@ -59,24 +59,22 @@ export default function ArticleForm({
   const [validateCategories, setValidateCategories] = useState(false);
 
   useEffect(() => {
-    fetchCategories().then((categories) => {
+    categoryService.fetchAll().then((categories) => {
       setAllCategories(categories.map((cat) => ({ name: cat.name })));
     });
-    fetchTags().then((tags) => {
+    tagService.fetchAll().then((tags) => {
       setAllTags(tags.map((tag) => ({ name: tag.name })));
     });
   }, []);
 
   const onSubmit = async (data: ArticleFormValues) => {
-    console.log("Form submitted with data:", data);
     await handleFormSubmit<ArticleDto, ArticleFormValues>({
       data,
       actionType,
       selectedItem,
-      addApi: addArticle,
-      updateApi: updateArticle,
+      addApi: articleService.add,
+      updateApi: articleService.update,
       onSuccess: (result) => {
-        console.log("Form submission successful:", result);
         if (actionType === ActionTypes.ADD) {
           addItem(result);
         } else {
@@ -132,7 +130,6 @@ export default function ArticleForm({
   };
 
   useEffect(() => {
-    console.log("selectedCategories", selectedCategories);
     if (!validateCategories) {
       return;
     }
@@ -172,7 +169,6 @@ export default function ArticleForm({
       <div className="flex-1 overflow-auto">
         <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-            {/* Title Field */}
             <div className="space-y-2 lg:col-span-2 col-span-1">
               <FormInput
                 id="title"
@@ -182,7 +178,6 @@ export default function ArticleForm({
               />
             </div>
 
-            {/* Slug Field */}
             <div className="space-y-2 lg:col-span-2 col-span-1">
               <FormInput
                 id="slug"
@@ -204,7 +199,6 @@ export default function ArticleForm({
             </div>
           </div>
 
-          {/* Content Field */}
           <div className="space-y-2">
             <Label htmlFor="content">İçerik *</Label>
             <div className="min-h-[600px]">
@@ -243,16 +237,6 @@ export default function ArticleForm({
               />
             </div>
           </div>
-
-          {/* Form Actions */}
-          {/**Show all errors */}
-          {form.formState.errors && (
-            <ErrorMessage
-              message={Object.values(form.formState.errors)
-                .map((error) => error.message)
-                .join(", ")}
-            />
-          )}
           <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t">
             <Button type="submit" className="flex-1 sm:flex-none">
               İçeriği Kaydet

@@ -58,7 +58,6 @@ export function readToken(accessToken?: string): TokenPayload | null {
   }
   try {
     const payload = JSON.parse(atob(accessToken.split(".")[1]));
-    console.log("Token payload:", payload);
 
     const tokenPayload: TokenPayload = {
       id: payload.id,
