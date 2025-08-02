@@ -10,3 +10,11 @@ export const menuTypeOptions = [
   { label: "Sidebar", value: "3" },
   { label: "Custom", value: "4" },
 ];
+
+export const userTypeOptions = [
+  { label: "Admin", value: "1" },
+  { label: "Editör", value: "2" },
+  { label: "Yazar", value: "3" },
+  { label: "Abone", value: "4" },
+  { label: "Misafir", value: "5" },
+];

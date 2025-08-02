@@ -44,6 +44,15 @@
   --color-add: var(--add);
   --color-update: var(--update);
   --color-delete: var(--delete);
+  --color-status-pending: var(--status-pending);
+  --color-status-published: var(--status-published);
+  --color-status-rejected: var(--status-rejected);
+
+  --color-user-active: var(--user-active);
+  --color-user-passive: var(--user-passive);
+  --color-pending: var(--pending);
+  --color-published: var(--published);
+  --color-rejected: var(--rejected);
 }
 
 :root {
@@ -82,6 +91,15 @@
   --add: #4caf50;
   --update: #2196f3;
   --delete: #f44336;
+  --status-pending: #4caf50;
+  --status-published: #2196f3;
+  --status-rejected: #f44336;
+  --user-active: #4caf50;
+  --user-passive: #2196f3;
+
+  --pending: #4caf50;
+  --published: #2196f3;
+  --rejected: #f44336;
 }
 
 .dark {
@@ -119,6 +137,15 @@
   --add: #4caf50;
   --update: #2196f3;
   --delete: #f44336;
+
+  --status-pending: #4caf50;
+  --status-published: #2196f3;
+  --status-rejected: #f44336;
+  --user-active: #4caf50;
+  --user-passive: #2196f3;
+  --pending: #4caf50;
+  --published: #2196f3;
+  --rejected: #f44336;
 }
 
 @layer base {
