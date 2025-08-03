@@ -33,7 +33,6 @@ const TopSlugStatistic = ({ title, type, fetchFunction }: TopSlugProps) => {
     fetchData().then((data) => {
       setData(data);
     });
-    console.log("TopSlug data fetched:", data);
   }, []);
   useEffect(() => {
     fetchData().then((data) => {

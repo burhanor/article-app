@@ -1,3 +1,4 @@
+import { UserType } from "@/enums/UserType";
 import { TokenPayload } from "@/models/TokenPayload";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -7,7 +8,7 @@ interface AuthStore {
   id: number;
   image: string;
   name: string;
-  userType: string;
+  userType: UserType;
   isAuthenticated: boolean;
   setToken: (tokenPayload: TokenPayload) => void;
   clearToken: () => void;
@@ -20,7 +21,7 @@ export const useAuthStore = create<AuthStore>()(
       id: 0,
       image: "",
       name: "",
-      userType: "",
+      userType: UserType.Guest,
       isAuthenticated: false,
 
       setToken: (tokenPayload: TokenPayload) =>
@@ -39,7 +40,7 @@ export const useAuthStore = create<AuthStore>()(
           id: 0,
           image: "",
           name: "",
-          userType: "",
+          userType: UserType.Guest,
           isAuthenticated: false,
         })),
     }),

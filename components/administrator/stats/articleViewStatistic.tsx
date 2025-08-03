@@ -145,7 +145,6 @@ export function ArticleViewStatistic() {
 
   const fetchData = React.useCallback(async () => {
     const result = await GetArticleViewCounts(startDate, new Date());
-    console.log("Fetched data:", result);
     const formattedData = result.map((item: ArticleViewCount) => ({
       viewDay: new Date(item.viewDay),
       totalViews: item.totalViews,
@@ -158,7 +157,6 @@ export function ArticleViewStatistic() {
       formattedData.reduce((acc, item) => acc + item.uniqueViews, 0)
     );
     setData(formattedData);
-    console.log("Fetched data:", result);
   }, [startDate]);
 
   React.useEffect(() => {

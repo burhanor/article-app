@@ -16,7 +16,7 @@ import Link from "next/link";
 import { useAuthStore } from "@/stores/authStore";
 
 const Profile = () => {
-  const { isAuthenticated, image, name, clearToken } = useAuthStore();
+  const { isAuthenticated, image, name, clearToken, userType } = useAuthStore();
   const router = useRouter();
   async function handleLogout() {
     try {
@@ -50,11 +50,14 @@ const Profile = () => {
           <DropdownMenuContent>
             <DropdownMenuLabel>Hesabım</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/administrator" className="w-full">
-                Admin Menüsü
-              </Link>
-            </DropdownMenuItem>
+            {userType.toString() === "Admin" && (
+              <DropdownMenuItem asChild>
+                <Link href="/administrator" className="w-full">
+                  Admin Menüsü
+                </Link>
+              </DropdownMenuItem>
+            )}
+
             <DropdownMenuItem asChild>
               <Link href="/profile" className="w-full">
                 Profil
