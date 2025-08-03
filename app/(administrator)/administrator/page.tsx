@@ -1,5 +1,6 @@
 "use client";
 import ArticleRateStatistic from "@/components/administrator/stats/articleRateStatistic";
+import { ArticleViewStatistic } from "@/components/administrator/stats/articleViewStatistic";
 import { GenericStatusStatistic } from "@/components/administrator/stats/genericStatusStatistic";
 import TopArticleStatistic from "@/components/administrator/stats/topArticleStatistic";
 import { TopAuthorStatistic } from "@/components/administrator/stats/topAuthorStatistic";
@@ -20,6 +21,9 @@ const AdministratorDashboard = () => {
   return (
     <>
       <div className="grid grid-cols-3   gap-3">
+        <div className="col-span-3">
+          <ArticleViewStatistic />
+        </div>
         <div className="col-span-3 md:col-span-1 ">
           <GenericStatusStatistic
             title="Makale Durum Dağılımı"

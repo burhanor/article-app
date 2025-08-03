@@ -1,51 +1,10 @@
-import Link from "next/link";
+import AdminSideBarLinks from "./adminsidebarLinks";
 
 export default function AdminSidebar() {
   return (
     <aside className=" bg-gray-800 text-white flex flex-col pb-6 py-2 h-full">
       <nav style={{ position: "fixed", top: "96px" }} className="w-1/12">
-        <ul>
-          <li>
-            <Link
-              href="/administrator/users"
-              className="flex items-center px-3 py-2 rounded hover:bg-gray-700 transition"
-            >
-              Kullanıcılar
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/administrator/categories"
-              className="flex items-center px-3 py-2 rounded hover:bg-gray-700 transition"
-            >
-              Kategoriler
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/administrator/tags"
-              className="flex items-center px-3 py-2 rounded hover:bg-gray-700 transition"
-            >
-              Etiketler
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/administrator/articles"
-              className="flex items-center px-3 py-2 rounded hover:bg-gray-700 transition"
-            >
-              Makaleler
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/administrator/menus"
-              className="flex items-center px-3 py-2 rounded hover:bg-gray-700 transition"
-            >
-              Menüler
-            </Link>
-          </li>
-        </ul>
+        <AdminSideBarLinks />
       </nav>
     </aside>
   );

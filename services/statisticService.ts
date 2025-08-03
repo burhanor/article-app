@@ -123,3 +123,18 @@ export async function GetTopArticleRates(
     return [];
   }
 }
+
+export async function GetArticleViewCounts(
+  startDate: Date,
+  endDate: Date
+): Promise<{ viewDay: Date; totalViews: number; uniqueViews: number }[]> {
+  try {
+    const response = await apiClient.get(basePath + "article-views", {
+      params: { startDate, endDate },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`${basePath} verileri alınırken hata oluştu:`, error);
+    return [];
+  }
+}
