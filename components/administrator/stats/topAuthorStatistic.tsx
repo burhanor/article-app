@@ -11,13 +11,8 @@ import {
 } from "@/components/ui/chart";
 import { GetTopAuthors } from "@/services/statisticService";
 import { useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
+import AdminStatisticSelect from "@/components/selects/adminStatisticSelect";
 interface CustomChartData {
   nickname: string;
   pendingCount: number;
@@ -94,19 +89,7 @@ export function TopAuthorStatistic() {
       </CardHeader>
       <CardContent className="flex-1">
         <div className="flex justify-end mb-4">
-          <Select
-            value={count.toString()}
-            onValueChange={(value) => setCount(Number(value))}
-          >
-            <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="5" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-            </SelectContent>
-          </Select>
+          <AdminStatisticSelect value={count} onChange={setCount} />
         </div>
         <ChartContainer config={chartConfig}>
           <BarChart data={chartData}>

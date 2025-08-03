@@ -11,6 +11,7 @@ import {
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -25,6 +26,11 @@ interface CustomChartData {
   passiveCount: number;
 }
 
+function GetLegend(name: string): string {
+  if (name === "activeCount") return "Aktif Kullanıcı";
+  if (name === "passiveCount") return "Pasif Kullanıcı";
+  return name;
+}
 async function fetchChartData(): Promise<{
   chartData: CustomChartData[];
   chartConfig: ChartConfig;
@@ -100,28 +106,40 @@ export function UserTypeStatistic() {
             <ChartTooltip
               content={
                 <ChartTooltipContent
-                  formatter={(value, name) => {
-                    if (name === "activeCount")
-                      return ["Aktif Kullanıcı : ", `${value}`];
-                    if (name === "passiveCount")
-                      return ["Pasif Kullanıcı : ", `${value}`];
-                    return [`${value}`, name];
+                  formatter={(value, name, props) => {
+                    return [
+                      <div key={name} className="flex items-center gap-2">
+                        <div
+                          className="w-3 h-3 border"
+                          style={{ backgroundColor: props.fill }}
+                        />
+                        <span>
+                          {GetLegend(name.toLocaleString())} : {value}
+                        </span>
+                      </div>,
+                    ];
                   }}
                 />
               }
             />
-
+            <ChartLegend
+              formatter={(value) => {
+                return (
+                  <div className="flex items-center gap-2">
+                    <span>{GetLegend(value)}</span>
+                  </div>
+                );
+              }}
+            />
             <Bar
               dataKey="activeCount"
               stackId="a"
               fill="var(--color-user-active)"
-              radius={[4, 4, 0, 0]}
             />
             <Bar
               dataKey="passiveCount"
               stackId="a"
               fill="var(--color-user-passive)"
-              radius={[4, 4, 0, 0]}
             />
           </BarChart>
         </ChartContainer>

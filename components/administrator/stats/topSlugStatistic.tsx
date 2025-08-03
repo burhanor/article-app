@@ -12,13 +12,8 @@ import {
 import { NameSlugCount } from "@/models/statistics/NameSlugCount";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
+import AdminStatisticSelect from "@/components/selects/adminStatisticSelect";
 interface TopSlugProps {
   title: string;
   type: string;
@@ -53,21 +48,7 @@ const TopSlugStatistic = ({ title, type, fetchFunction }: TopSlugProps) => {
       </CardHeader>
       <CardContent className="flex-1">
         <div className="flex justify-end mb-4">
-          <Select
-            value={count.toString()}
-            onValueChange={(value) => setCount(Number(value))}
-          >
-            <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="5" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
-              <SelectItem value="50">50</SelectItem>
-              <SelectItem value="10000">Tümü</SelectItem>
-            </SelectContent>
-          </Select>
+          <AdminStatisticSelect value={count} onChange={setCount} />
         </div>
         <div className={data.length > 10 ? "overflow-y-auto max-h-96" : ""}>
           <Table>

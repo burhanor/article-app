@@ -1,5 +1,7 @@
 "use client";
+import ArticleRateStatistic from "@/components/administrator/stats/articleRateStatistic";
 import { GenericStatusStatistic } from "@/components/administrator/stats/genericStatusStatistic";
+import TopArticleStatistic from "@/components/administrator/stats/topArticleStatistic";
 import { TopAuthorStatistic } from "@/components/administrator/stats/topAuthorStatistic";
 import TopSlug from "@/components/administrator/stats/topSlugStatistic";
 import { UserTypeStatistic } from "@/components/administrator/stats/userTypeStatistic";
@@ -7,6 +9,8 @@ import {
   GetArticleStatusCount,
   GetCategoryStatusCount,
   GetTagStatusCount,
+  GetTopArticleRates,
+  GetTopArticles,
   GetTopCategories,
   GetTopTags,
 } from "@/services/statisticService";
@@ -53,6 +57,19 @@ const AdministratorDashboard = () => {
             title="En Sık Kullanılan Etiketler"
             fetchFunction={GetTopTags}
             type="Etiket"
+          />
+        </div>
+
+        <div className="col-span-3 md:col-span-1">
+          <TopArticleStatistic
+            title="En Çok Görüntülenen Makaleler"
+            fetchFunction={GetTopArticles}
+          />
+        </div>
+        <div className="col-span-3 md:col-span-1">
+          <ArticleRateStatistic
+            title="En Yüksek Oylanan Makaleler"
+            fetchFunction={GetTopArticleRates}
           />
         </div>
         <div className="col-span-3 md:col-span-1">

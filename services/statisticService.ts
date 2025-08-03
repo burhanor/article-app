@@ -3,6 +3,8 @@ import apiClient from "./client";
 import { UserTypeCount } from "@/models/statistics/UserTypeCount";
 import { NameSlugCount } from "@/models/statistics/NameSlugCount";
 import { AuthorArticle } from "@/models/statistics/AuthorArticle";
+import { TopArticle } from "@/models/statistics/TopArticle";
+import { ArticleRate } from "@/models/statistics/ArticleRate";
 
 const basePath = "/stats/";
 
@@ -83,6 +85,39 @@ export async function GetTopAuthors(limit?: number): Promise<AuthorArticle[]> {
     });
     const data = response.data as AuthorArticle[];
     return data.filter((item) => item.totalCount > 0);
+  } catch (error) {
+    console.error(`${basePath} verileri alınırken hata oluştu:`, error);
+    return [];
+  }
+}
+
+export async function GetTopArticles(
+  startDate: Date,
+  endDate: Date,
+  count?: number
+): Promise<TopArticle[]> {
+  try {
+    const response = await apiClient.get(basePath + "top-articles", {
+      params: { startDate, endDate, count },
+    });
+    const data = response.data as TopArticle[];
+    return data.filter((item) => item.viewCount > 0);
+  } catch (error) {
+    console.error(`${basePath} verileri alınırken hata oluştu:`, error);
+    return [];
+  }
+}
+
+export async function GetTopArticleRates(
+  startDate: Date,
+  endDate: Date,
+  count?: number
+): Promise<ArticleRate[]> {
+  try {
+    const response = await apiClient.get(basePath + "article-rates", {
+      params: { startDate, endDate, count },
+    });
+    return response.data;
   } catch (error) {
     console.error(`${basePath} verileri alınırken hata oluştu:`, error);
     return [];
