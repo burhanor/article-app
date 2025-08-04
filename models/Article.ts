@@ -1,6 +1,7 @@
 import { Status } from "@/enums/Status";
 import { CategoryDto } from "./CategoryDto";
 import { TagDto } from "./TagDto";
+import { ArticleInfo } from "./ArticleInfo";
 
 export interface Article {
   id: number;
@@ -17,4 +18,5 @@ export interface Article {
 export interface ArticleDto extends Article {
   nickname: string;
   avatar?: string;
+  info: ArticleInfo;
 }

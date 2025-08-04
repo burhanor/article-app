@@ -6,6 +6,8 @@ import { createGenericService } from "./genericService";
 import { getAvatars, getNicknames } from "./userService";
 import { ArticleFormValues } from "@/schemas/articleSchema";
 import { PaginationContainer } from "@/models/types/PaginationContainer";
+import { ArticleInfo } from "@/models/ArticleInfo";
+import { Status } from "@/enums/Status";
 
 export async function getMostViewedArticles(
   count?: number
@@ -117,6 +119,22 @@ async function fetchArticles(
 
     const enrichedItems = await enrichArticles(response.data.items);
 
+    const articleIds = enrichedItems.map((item) => item.id);
+
+    const articleInfo = await getArticleInfo(articleIds);
+    enrichedItems.forEach((item) => {
+      const info = articleInfo.find((i) => i.articleId === item.id);
+      if (info) {
+        item.info = info;
+      } else {
+        item.info = {
+          articleId: item.id,
+          likeCount: 0,
+          dislikeCount: 0,
+          viewCount: 0,
+        };
+      }
+    });
     return {
       ...response.data,
       items: enrichedItems,
@@ -149,4 +167,65 @@ export function getArticlesBySlug(
   pageSize: number = 10
 ) {
   return fetchArticles("/article/by-category", searchKey, pageNumber, pageSize);
+}
+
+export async function articleIsExist(slug: string): Promise<boolean> {
+  const response = await apiClient.get<boolean>(
+    `/article/${encodeURIComponent(slug)}/exist`
+  );
+  return response.data;
+}
+export async function getArticleInfo(
+  articleIds: number[]
+): Promise<ArticleInfo[]> {
+  try {
+    const response = await apiClient.post<ArticleInfo[]>(
+      "/article/info",
+      articleIds
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Makale bilgileri alınırken bir hata oluştu:", error);
+    return [];
+  }
+}
+
+export async function getArticle(slug: string): Promise<ArticleDto> {
+  try {
+    const response = await apiClient.get<ArticleDto>(
+      `/article/${encodeURIComponent(slug)}/detail`
+    );
+    if (response.data.id > 0) {
+      const info = await getArticleInfo([response.data.id]);
+      response.data.info = info[0] || {
+        articleId: response.data.id,
+        likeCount: 0,
+        dislikeCount: 0,
+        viewCount: 0,
+      };
+      console.log("Article fetched:", response.data);
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Makale alınırken bir hata oluştu:", error);
+  }
+  return {
+    id: 0,
+    title: "",
+    content: "",
+    slug: "",
+    userId: 0,
+    publishDate: undefined,
+    nickname: "Bilinmiyor",
+    avatar: "",
+    info: {
+      articleId: 0,
+      likeCount: 0,
+      dislikeCount: 0,
+      viewCount: 0,
+    },
+    status: Status.Published,
+    categories: [],
+    tags: [],
+  };
 }

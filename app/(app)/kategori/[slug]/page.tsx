@@ -1,7 +1,7 @@
 import ArticleCard from "@/components/article/articleCard/articleCard";
 import PaginationComponent from "@/components/pagination/pagination";
 import { getArticlesBySlug } from "@/services/articleService";
-import { categoryExists } from "@/services/categoryService";
+import { categoryIsExist } from "@/services/categoryService";
 import { notFound } from "next/navigation";
 interface PageProps {
   params: { slug: string };
@@ -14,7 +14,7 @@ export default async function CategoriesPage({
   const slug = params.slug; // "kategori-adi"
   const sayfa = parseInt(searchParams.sayfa || "1", 10); // 1 (varsayılan)
 
-  const exists = await categoryExists(slug);
+  const exists = await categoryIsExist(slug);
   if (!exists) {
     notFound();
   }

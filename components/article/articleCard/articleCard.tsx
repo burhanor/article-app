@@ -87,7 +87,7 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
           </div>
           <div className="flex items-center space-x-1">
             <Eye className="h-4 w-4" />
-            <span>{formatViews(article.id)} görüntülenme</span>
+            <span>{formatViews(article.info.viewCount)} görüntülenme</span>
           </div>
         </div>
       </div>
