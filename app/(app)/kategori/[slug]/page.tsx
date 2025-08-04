@@ -11,10 +11,11 @@ export default async function CategoriesPage({
   params,
   searchParams,
 }: PageProps) {
-  const slug = params.slug; // "kategori-adi"
-  const sayfa = parseInt(searchParams.sayfa || "1", 10); // 1 (varsayılan)
+  const slug = await params.slug; // "kategori-adi"
+  const sayfa = parseInt((await searchParams.sayfa) || "1", 10); // 1 (varsayılan)
 
   const exists = await categoryIsExist(slug);
+
   if (!exists) {
     notFound();
   }

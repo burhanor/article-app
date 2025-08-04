@@ -5,8 +5,7 @@ import Link from "next/link";
 import { Calendar, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ArticleDto } from "@/models/Article";
-import defaultAvatar from "@/public/default-avatar.webp";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getAvatarUrl } from "@/lib/utils";
 import { Status } from "@/enums/Status";
 
 interface ArticleCardProps {
@@ -20,14 +19,11 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
     }
     return views.toString();
   };
-  const hostUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
-  const avatarUrl = article.avatar
-    ? `${hostUrl}${article.avatar}`
-    : defaultAvatar.src;
+
   return (
     <article className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200 px-5">
       {/* Başlık */}
-      <h2 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 leading-tight">
+      <h2 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 leading-tight wrap-anywhere">
         <Link
           href={`/makale/${article.slug}`}
           className="block p-6 cursor-pointer"
@@ -66,7 +62,7 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
         {/* Yazar Bilgileri */}
         <div className="flex items-center space-x-3">
           <Image
-            src={avatarUrl}
+            src={getAvatarUrl(article.avatar)}
             alt={article.nickname}
             width={40}
             height={40}

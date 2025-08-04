@@ -110,11 +110,12 @@ async function fetchArticles(
   url: string,
   searchKey: string,
   pageNumber: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
+  status: Status = Status.Published
 ): Promise<PaginationContainer<ArticleDto>> {
   try {
     const response = await apiClient.get<PaginationContainer<ArticleDto>>(url, {
-      params: { searchKey, pageNumber, pageSize },
+      params: { searchKey, pageNumber, pageSize, status },
     });
 
     const enrichedItems = await enrichArticles(response.data.items);
@@ -156,17 +157,25 @@ async function fetchArticles(
 export function getArticleByPage(
   searchKey: string,
   pageNumber: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
+  status: Status = Status.Published
 ) {
-  return fetchArticles("/article", searchKey, pageNumber, pageSize);
+  return fetchArticles("/article", searchKey, pageNumber, pageSize, status);
 }
 
 export function getArticlesBySlug(
   searchKey: string,
   pageNumber: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
+  status: Status = Status.Published
 ) {
-  return fetchArticles("/article/by-category", searchKey, pageNumber, pageSize);
+  return fetchArticles(
+    "/article/by-category",
+    searchKey,
+    pageNumber,
+    pageSize,
+    status
+  );
 }
 
 export async function articleIsExist(slug: string): Promise<boolean> {
@@ -203,6 +212,8 @@ export async function getArticle(slug: string): Promise<ArticleDto> {
         dislikeCount: 0,
         viewCount: 0,
       };
+      const avatar = await getAvatars([response.data.userId]);
+      response.data.avatar = avatar[0]?.avatar || "";
       console.log("Article fetched:", response.data);
       return response.data;
     }

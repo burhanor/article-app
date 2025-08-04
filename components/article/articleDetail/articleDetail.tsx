@@ -5,7 +5,8 @@ import { Separator } from "@/components/ui/separator";
 import { Calendar, Eye, Heart, ThumbsDown, User } from "lucide-react";
 import { getArticle } from "@/services/articleService";
 import LikeDislikeButtons from "../likeDislikeButtons/likeDislikeButtons";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getAvatarUrl } from "@/lib/utils";
+import Link from "next/link";
 
 interface ArticlePageProps {
   slug: string;
@@ -14,6 +15,7 @@ interface ArticlePageProps {
 export default async function ArticlePage({ slug }: ArticlePageProps) {
   const article = await getArticle(slug);
 
+  console.log("Article fetched:", article);
   return (
     <div className="min-h-screen ">
       <div className="container mx-auto px-4 py-8 max-w-8xl">
@@ -29,9 +31,10 @@ export default async function ArticlePage({ slug }: ArticlePageProps) {
               <div className="flex items-center gap-3">
                 <Avatar className="h-12 w-12 ring-2 ring-slate-200 dark:ring-slate-700">
                   <AvatarImage
-                    src={article.avatar || "/placeholder.svg"}
+                    src={getAvatarUrl(article.avatar)}
                     alt={article.nickname}
                   />
+
                   <AvatarFallback>
                     <User className="h-6 w-6" />
                   </AvatarFallback>
@@ -65,40 +68,20 @@ export default async function ArticlePage({ slug }: ArticlePageProps) {
               style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
-            <Separator className="my-8" />
-
-            {/* Tags */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                Tags
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {article.tags.map((tag) => (
-                  <Badge
-                    key={tag.slug}
-                    variant="outline"
-                    className="hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
-                  >
-                    #{tag.name}
-                  </Badge>
-                ))}
-              </div>
-            </div>
 
             {/* Categories */}
             <div className="space-y-3">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                Categories
-              </h3>
               <div className="flex flex-wrap gap-2">
                 {article.categories.map((category) => (
-                  <Badge
-                    key={category.slug}
-                    variant="secondary"
-                    className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors cursor-pointer"
-                  >
-                    {category.name}
-                  </Badge>
+                  <Link href={`/kategori/${category.slug}`} key={category.slug}>
+                    <Badge
+                      key={category.slug}
+                      variant="secondary"
+                      className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors cursor-pointer"
+                    >
+                      {category.name}
+                    </Badge>
+                  </Link>
                 ))}
               </div>
             </div>
