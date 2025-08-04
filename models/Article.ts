@@ -16,4 +16,5 @@ export interface Article {
 
 export interface ArticleDto extends Article {
   nickname: string;
+  avatar?: string;
 }
