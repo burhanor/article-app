@@ -31,3 +31,12 @@ const userService = createGenericService<User, UserFormValues>(
 );
 
 export default userService;
+
+export async function userIsExist(nickname: string): Promise<boolean> {
+  try {
+    const response = await apiClient.get<boolean>(`/user/${nickname}/exist`);
+    return response.data;
+  } catch {}
+
+  return false;
+}

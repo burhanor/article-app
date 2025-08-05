@@ -118,6 +118,7 @@ async function fetchArticles(
       params: { searchKey, pageNumber, pageSize, status },
     });
 
+    console.log("Fetched articles:", response.data);
     const enrichedItems = await enrichArticles(response.data.items);
 
     const articleIds = enrichedItems.map((item) => item.id);
@@ -171,6 +172,21 @@ export function getArticlesBySlug(
 ) {
   return fetchArticles(
     "/article/by-category",
+    searchKey,
+    pageNumber,
+    pageSize,
+    status
+  );
+}
+
+export function getArticlesByAuthor(
+  searchKey: string,
+  pageNumber: number = 1,
+  pageSize: number = 10,
+  status: Status = Status.Published
+) {
+  return fetchArticles(
+    "/article/by-author",
     searchKey,
     pageNumber,
     pageSize,

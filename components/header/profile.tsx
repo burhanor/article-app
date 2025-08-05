@@ -41,7 +41,7 @@ const Profile = () => {
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger className="flex items-center space-x-2">
             <Avatar>
-              <AvatarImage src={getAvatarUrl(image)} />
+              <AvatarImage src={getAvatarUrl(image)} alt={name} />
               <AvatarFallback className="bg-purple-700 text-white text-lg ">
                 {name.charAt(0).toUpperCase()}
               </AvatarFallback>

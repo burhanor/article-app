@@ -26,17 +26,15 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
   return (
     <article className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200 p-6 flex flex-col h-full hover:bg-gray-50">
       {/* Başlık */}
-      <Link href={`/makale/${article.slug}`} className="block h-full">
+      <Link href={`/makale/${article.slug}`} className="block">
         <h2 className="text-2xl font-bold text-gray-900 mb-3 leading-tight wrap-anywhere hover:text-blue-600 transition-colors duration-200">
           {article.title}
         </h2>
-
-        {/* İçerik Önizleme */}
-        <div
-          className="text-gray-700 text-base leading-relaxed mb-4 line-height-relaxed line-clamp-3 flex-grow"
-          dangerouslySetInnerHTML={{ __html: article.content }}
-        ></div>
       </Link>
+      <div
+        className="text-gray-700 text-base leading-relaxed mb-4 line-height-relaxed line-clamp-3 flex-grow"
+        dangerouslySetInnerHTML={{ __html: article.content }}
+      ></div>
       {/* Kategoriler */}
       <div className="flex flex-wrap gap-2 mb-4">
         {article.categories
@@ -56,20 +54,26 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
             </Link>
           ))}
       </div>
-
       {/* Alt Bilgiler */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-gray-100 mt-auto">
         {" "}
         {/* Yazar Bilgileri */}
         <div className="flex items-center space-x-3">
-          <Image
-            src={avatarSrc || "/placeholder.svg"} // Yer tutucu URL kullanıldı
-            alt={article.nickname}
-            width={40}
-            height={40}
-            className="rounded-full object-cover"
-          />
-          <span className="text-gray-800 font-medium">{article.nickname}</span>
+          <Link
+            href={`/yazar/${article.nickname}`}
+            className="flex items-center space-x-3"
+          >
+            <Image
+              src={avatarSrc || "/placeholder.svg"}
+              alt={article.nickname}
+              width={40}
+              height={40}
+              className="rounded-full object-cover"
+            />
+            <span className="text-gray-800 font-medium">
+              {article.nickname}
+            </span>
+          </Link>
         </div>
         {/* Tarih ve Görüntülenme */}
         <div className="flex items-center space-x-4 text-sm text-gray-500">
