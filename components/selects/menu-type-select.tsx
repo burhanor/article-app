@@ -22,6 +22,7 @@ const MenuTypeSelect = ({ menuType, onChange }: Props) => {
         <SelectItem value={MenuType.Footer.toString()}>Footer</SelectItem>
         <SelectItem value={MenuType.Sidebar.toString()}>Sidebar</SelectItem>
         <SelectItem value={MenuType.Custom.toString()}>Özel</SelectItem>
+        <SelectItem value={MenuType.Category.toString()}>Kategori</SelectItem>
       </SelectContent>
     </Select>
   );

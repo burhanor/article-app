@@ -4,12 +4,13 @@ import {
   getMostViewedArticles,
   getTopRatedArticles,
 } from "@/services/articleService";
-import categoryService from "@/services/categoryService";
+import { getMenuItemsByType } from "@/services/menuItemService";
+import { MenuType } from "@/enums/MenuType";
 
 export async function ArticleSidebar() {
   const mostVotedArticles = await getTopRatedArticles();
   const mostReadArticles = await getMostViewedArticles();
-  const categories = await categoryService.fetchAll();
+  const categories = await getMenuItemsByType(MenuType.Category);
   return (
     <aside className="w-full lg:w-80 space-y-6 p-4 me-25 lg:p-0">
       {/* Kategoriler Kartı */}
@@ -20,12 +21,12 @@ export async function ArticleSidebar() {
         <CardContent>
           <ul className="space-y-2">
             {categories.map((category) => (
-              <li key={category.slug}>
+              <li key={category.id}>
                 <Link
-                  href={`/kategori/${category.slug}`}
+                  href={`/${category.link}`}
                   className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  {category.name}
+                  {category.title}
                 </Link>
               </li>
             ))}
