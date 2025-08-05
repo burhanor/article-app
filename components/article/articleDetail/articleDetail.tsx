@@ -22,7 +22,7 @@ export default async function ArticlePage({ slug }: ArticlePageProps) {
         <Card className="shadow-xl border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
           <CardHeader className="space-y-6 pb-8">
             {/* Article Title */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-900 dark:text-slate-100">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-slate-900 dark:text-slate-100 wrap-anywhere">
               {article.title}
             </h1>
 

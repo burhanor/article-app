@@ -14,9 +14,11 @@ import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useAuthStore } from "@/stores/authStore";
+import { getAvatarUrl } from "@/lib/utils";
 
 const Profile = () => {
   const { isAuthenticated, image, name, clearToken, userType } = useAuthStore();
+
   const router = useRouter();
   async function handleLogout() {
     try {
@@ -39,7 +41,7 @@ const Profile = () => {
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger className="flex items-center space-x-2">
             <Avatar>
-              <AvatarImage src={image} />
+              <AvatarImage src={getAvatarUrl(image)} />
               <AvatarFallback className="bg-purple-700 text-white text-lg ">
                 {name.charAt(0).toUpperCase()}
               </AvatarFallback>
