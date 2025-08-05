@@ -23,7 +23,7 @@ export async function ArticleSidebar() {
               <li key={category.slug}>
                 <Link
                   href={`/kategori/${category.slug}`}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="block text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {category.name}
                 </Link>
@@ -44,7 +44,7 @@ export async function ArticleSidebar() {
               <li key={article.slug}>
                 <Link
                   href={`/makale/${article.slug}`}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors wrap-anywhere"
+                  className="block text-sm text-muted-foreground hover:text-primary transition-colors wrap-anywhere"
                 >
                   {article.title}
                 </Link>
@@ -65,7 +65,7 @@ export async function ArticleSidebar() {
               <li key={article.slug}>
                 <Link
                   href={`/makale/${article.slug}`}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors wrap-anywhere"
+                  className="block text-sm text-muted-foreground hover:text-primary transition-colors wrap-anywhere"
                 >
                   {article.title}
                 </Link>

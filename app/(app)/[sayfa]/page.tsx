@@ -13,7 +13,6 @@ export default async function HomePagePagination({
   return (
     <>
       <div className="container mx-auto">
-        <div>Burası Homepage</div>
         <div className="grid grid-cols-1 gap-6">
           {articles.items.map((article) => (
             <ArticleCard key={article.id} article={article} />

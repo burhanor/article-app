@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { ArticleDto } from "@/models/Article";
-import { formatDate, getAvatarUrl } from "@/lib/utils";
+import type { ArticleDto } from "@/models/Article";
 import { Status } from "@/enums/Status";
+import { formatDate, getAvatarUrl } from "@/lib/utils";
 
 interface ArticleCardProps {
   article: ArticleDto;
@@ -20,33 +20,32 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
     return views.toString();
   };
 
-  return (
-    <article className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200 px-5">
-      {/* Başlık */}
-      <h2 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 leading-tight wrap-anywhere">
-        <Link
-          href={`/makale/${article.slug}`}
-          className="block p-6 cursor-pointer"
-        >
-          {article.title}
-        </Link>
-      </h2>
+  const avatarSrc =
+    getAvatarUrl(article.avatar) || "/placeholder.svg?height=40&width=40";
 
-      {/* İçerik Önizleme */}
-      <div
-        className="text-gray-700 text-base leading-relaxed mb-4 line-height-relaxed line-clamp-3"
-        dangerouslySetInnerHTML={{ __html: article.content }}
-      ></div>
+  return (
+    <article className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200 p-6 flex flex-col h-full hover:bg-gray-50">
+      {/* Başlık */}
+      <Link href={`/makale/${article.slug}`} className="block h-full">
+        <h2 className="text-2xl font-bold text-gray-900 mb-3 leading-tight wrap-anywhere hover:text-blue-600 transition-colors duration-200">
+          {article.title}
+        </h2>
+
+        {/* İçerik Önizleme */}
+        <div
+          className="text-gray-700 text-base leading-relaxed mb-4 line-height-relaxed line-clamp-3 flex-grow"
+          dangerouslySetInnerHTML={{ __html: article.content }}
+        ></div>
+      </Link>
       {/* Kategoriler */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 mb-4">
         {article.categories
           .filter((m) => m.status === Status.Published)
           .map((category, index) => (
             <Link
               key={index}
-              href={`/kategori/${encodeURIComponent(
-                category.slug.toLowerCase().replace(/\s+/g, "-")
-              )}`}
+              href={`/kategori/${category.slug}`}
+              className="block h-full"
             >
               <Badge
                 variant="secondary"
@@ -57,12 +56,14 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
             </Link>
           ))}
       </div>
+
       {/* Alt Bilgiler */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-gray-100 mt-auto">
+        {" "}
         {/* Yazar Bilgileri */}
         <div className="flex items-center space-x-3">
           <Image
-            src={getAvatarUrl(article.avatar)}
+            src={avatarSrc || "/placeholder.svg"} // Yer tutucu URL kullanıldı
             alt={article.nickname}
             width={40}
             height={40}
@@ -70,7 +71,6 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
           />
           <span className="text-gray-800 font-medium">{article.nickname}</span>
         </div>
-
         {/* Tarih ve Görüntülenme */}
         <div className="flex items-center space-x-4 text-sm text-gray-500">
           <div className="flex items-center space-x-1">
