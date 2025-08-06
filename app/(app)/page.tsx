@@ -10,12 +10,15 @@ export async function generateMetadata() {
     title: data.title,
     description: data.description,
     keywords: data.keywords,
+    robots: {
+      index: true,
+      follow: true,
+    },
   };
 }
 
 export default async function Home() {
   const articles = await getArticleByPage("", 1, 10);
-  console.log("Fetched articles:", articles);
   return (
     <>
       <div className="container mx-auto">

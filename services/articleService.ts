@@ -121,7 +121,6 @@ async function fetchArticles(
       params: { searchKey, pageNumber, pageSize, status },
     });
 
-    console.log("Fetched articles:", response.data);
     const enrichedItems = await enrichArticles(response.data.items);
 
     const articleIds = enrichedItems.map((item) => item.id);
@@ -233,7 +232,6 @@ export async function getArticle(slug: string): Promise<ArticleDto> {
       };
       const avatar = await getAvatars([response.data.userId]);
       response.data.avatar = avatar[0]?.avatar || "";
-      console.log("Article fetched:", response.data);
       return response.data;
     }
   } catch (error) {
@@ -268,7 +266,6 @@ export async function voteArticle(
     const response = await apiClient.post<
       ResponseContainer<ArticleVoteResponse[]>
     >(`/article/${articleId}/votes`, { articleVote });
-    console.log("Article vote response:", response.data.data);
     return response.data.data;
   } catch (error) {
     console.error("Makale oylama işlemi sırasında bir hata oluştu:", error);

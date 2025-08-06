@@ -16,7 +16,6 @@ interface ArticlePageProps {
 export default async function ArticlePage({ slug }: ArticlePageProps) {
   const article = await getArticle(slug);
 
-  console.log("Article fetched:", article);
   return (
     <div className="min-h-screen ">
       <div className="container mx-auto px-4 py-8 max-w-8xl">

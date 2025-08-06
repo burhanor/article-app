@@ -13,6 +13,5 @@ export async function categoryIsExist(slug: string): Promise<boolean> {
   const response = await apiClient.get<boolean>(
     `/category/${encodeURIComponent(slug)}/exist`
   );
-  console.log("Category existence check:", response.data);
   return response.data;
 }

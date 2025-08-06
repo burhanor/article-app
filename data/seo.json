@@ -4,6 +4,16 @@
     "description": "Ana sayfa açıklaması buraya gelecek.",
     "keywords": "nextjs, seo, örnek"
   },
+  "categories": {
+    "title": "Kategoriler",
+    "description": "Kategoriler sayfası açıklaması.",
+    "keywords": "kategoriler, makaleler, blog"
+  },
+  "search": {
+    "title": "Arama Sonuçları",
+    "description": "Arama sonuçları sayfası açıklaması.",
+    "keywords": "arama, sonuçlar, makaleler"
+  },
   "about": {
     "title": "Hakkımızda Başlığı",
     "description": "Hakkımızda sayfası açıklaması.",

@@ -3,9 +3,25 @@ import PaginationComponent from "@/components/pagination/pagination";
 import { getArticlesBySlug } from "@/services/articleService";
 import { categoryIsExist } from "@/services/categoryService";
 import { notFound } from "next/navigation";
+import seoData from "@/data/seo.json";
+
 interface PageProps {
   params: { slug: string };
   searchParams: { sayfa?: string };
+}
+
+export async function generateMetadata({ params }: PageProps) {
+  const data = seoData["categories"];
+
+  return {
+    title: data.title,
+    description: data.description,
+    keywords: data.keywords + `, ${params.slug}`,
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
 }
 export default async function CategoriesPage({
   params,

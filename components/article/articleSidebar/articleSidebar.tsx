@@ -14,7 +14,7 @@ export async function ArticleSidebar() {
   return (
     <aside className="w-full lg:w-80 space-y-6 p-4 me-25 lg:p-0">
       {/* Kategoriler Kartı */}
-      <Card>
+      <Card className="gap-2">
         <CardHeader>
           <CardTitle className="text-lg">Kategoriler</CardTitle>
         </CardHeader>
@@ -35,7 +35,7 @@ export async function ArticleSidebar() {
       </Card>
 
       {/* En Çok Okunan Makaleler Kartı */}
-      <Card>
+      <Card className="gap-2">
         <CardHeader>
           <CardTitle className="text-lg">En Çok Okunan Makaleler</CardTitle>
         </CardHeader>
@@ -56,7 +56,7 @@ export async function ArticleSidebar() {
       </Card>
 
       {/* En Çok Oylanan Makaleler Kartı */}
-      <Card>
+      <Card className="gap-2">
         <CardHeader>
           <CardTitle className="text-lg">En Çok Oylanan Makaleler</CardTitle>
         </CardHeader>

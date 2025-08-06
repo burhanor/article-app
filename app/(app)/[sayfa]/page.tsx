@@ -1,6 +1,17 @@
 import ArticleCard from "@/components/article/articleCard/articleCard";
 import PaginationComponent from "@/components/pagination/pagination";
 import { getArticleByPage } from "@/services/articleService";
+import seoData from "@/data/seo.json";
+
+export async function generateMetadata() {
+  const data = seoData["homepage"];
+
+  return {
+    title: data.title,
+    description: data.description,
+    keywords: data.keywords,
+  };
+}
 
 export default async function HomePagePagination({
   params,
@@ -9,7 +20,6 @@ export default async function HomePagePagination({
 }) {
   const { sayfa } = await params;
   const articles = await getArticleByPage("", sayfa, 10);
-  console.log("Fetched articles:", articles);
   return (
     <>
       <div className="container mx-auto">
