@@ -8,6 +8,9 @@ import { ArticleFormValues } from "@/schemas/articleSchema";
 import { PaginationContainer } from "@/models/types/PaginationContainer";
 import { ArticleInfo } from "@/models/ArticleInfo";
 import { Status } from "@/enums/Status";
+import { ArticleVote } from "@/enums/ArticleVote";
+import ArticleVoteResponse from "@/models/ArticleVoteResponse";
+import { ResponseContainer } from "@/models/types/ResponseContainer";
 
 export async function getMostViewedArticles(
   count?: number
@@ -255,4 +258,20 @@ export async function getArticle(slug: string): Promise<ArticleDto> {
     categories: [],
     tags: [],
   };
+}
+
+export async function voteArticle(
+  articleId: number,
+  articleVote: ArticleVote
+): Promise<ArticleVoteResponse[] | undefined> {
+  try {
+    const response = await apiClient.post<
+      ResponseContainer<ArticleVoteResponse[]>
+    >(`/article/${articleId}/votes`, { articleVote });
+    console.log("Article vote response:", response.data.data);
+    return response.data.data;
+  } catch (error) {
+    console.error("Makale oylama işlemi sırasında bir hata oluştu:", error);
+    return undefined;
+  }
 }
