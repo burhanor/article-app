@@ -17,12 +17,8 @@ import { Status } from "@/enums/Status";
 import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
 import FormInput from "@/components/form/formInput/formInput";
 import { handleFormSubmit } from "@/lib/formHelper";
-const defaultItem: Tag = {
-  name: "",
-  slug: "",
-  status: Status.Pending,
-  id: 0,
-};
+import { defaultTag as defaultItem } from "@/models/defaults/defaultTag";
+
 export default function TagForm({
   className,
   modal,

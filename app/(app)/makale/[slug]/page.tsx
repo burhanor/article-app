@@ -3,12 +3,13 @@ import { Status } from "@/enums/Status";
 import { articleIsExist, getArticle } from "@/services/articleService";
 import { notFound } from "next/navigation";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const article = await getArticle(params.slug);
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props) {
+  const p = await params;
+  const article = await getArticle(p.slug);
   return {
     title: article.title,
     description: article.title,
@@ -24,21 +25,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArticlePage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const { slug } = await params;
+export default async function ArticlePage({ params }: Props) {
+  const p = await params;
 
-  const exists = await articleIsExist(slug);
+  const exists = await articleIsExist(p.slug);
   if (!exists) {
     notFound();
   }
 
   return (
     <div>
-      <ArticleDetail slug={slug} />
+      <ArticleDetail slug={p.slug} />
     </div>
   );
 }

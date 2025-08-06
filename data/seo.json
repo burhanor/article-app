@@ -9,6 +9,11 @@
     "description": "Kategoriler sayfası açıklaması.",
     "keywords": "kategoriler, makaleler, blog"
   },
+  "authors": {
+    "title": "Yazarlar",
+    "description": "Yazarlar sayfası açıklaması.",
+    "keywords": "yazarlar, makaleler, blog"
+  },
   "search": {
     "title": "Arama Sonuçları",
     "description": "Arama sonuçları sayfası açıklaması.",

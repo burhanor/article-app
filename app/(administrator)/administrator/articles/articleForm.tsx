@@ -27,19 +27,7 @@ import MultiSelectInput, {
 import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
 import tagService from "@/services/tagService";
 import categoryService from "@/services/categoryService";
-
-const defaultItem: ArticleDto = {
-  title: "",
-  content: "",
-  categories: [],
-  tags: [],
-  publishDate: undefined,
-  userId: 0,
-  slug: "",
-  status: Status.Pending,
-  id: 0,
-  nickname: "",
-};
+import { defaultArticleDto as defaultItem } from "@/models/defaults/defaultArticle";
 
 export default function ArticleForm({
   modal,

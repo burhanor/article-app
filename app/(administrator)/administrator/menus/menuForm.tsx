@@ -18,14 +18,8 @@ import { Label } from "@/components/ui/label";
 import ErrorMessage from "@/components/errorMessage/errorMessage";
 import MenuTypeSelect from "@/components/selects/menu-type-select";
 import { handleFormSubmit } from "@/lib/formHelper";
-const defaultItem: MenuItem = {
-  id: 0,
-  title: "",
-  description: "",
-  link: "",
-  menuType: MenuType.Header,
-  displayOrder: 1,
-};
+import { defaultMenuItem as defaultItem } from "@/models/defaults/defaultMenuItem";
+
 export default function MenuForm({
   className,
   modal,

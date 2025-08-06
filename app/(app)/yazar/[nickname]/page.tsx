@@ -3,13 +3,40 @@ import PaginationComponent from "@/components/pagination/pagination";
 import { getArticlesByAuthor } from "@/services/articleService";
 import { userIsExist } from "@/services/userService";
 import { notFound } from "next/navigation";
-interface PageProps {
-  params: { nickname: string };
-  searchParams: { sayfa?: string };
+import seoData from "@/data/seo.json";
+
+type Props = {
+  params: Promise<{ nickname: string }>;
+  searchParams: Promise<{
+    [sayfa: string]: string | string[] | undefined;
+  }>;
+};
+
+export async function generateMetadata({ params }: Props) {
+  const data = seoData["authors"];
+  const p = await params;
+
+  return {
+    title: data.title,
+    description: data.description,
+    keywords: data.keywords + `, ${p.nickname}`,
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
 }
-export default async function AuthorPage({ params, searchParams }: PageProps) {
-  const nickname = await params.nickname;
-  const sayfa = parseInt((await searchParams.sayfa) || "1", 10);
+
+export default async function AuthorPage({ params, searchParams }: Props) {
+  const p = await params;
+  const sp = await searchParams;
+  const nickname = p.nickname;
+  const page = sp.sayfa
+    ? Array.isArray(sp.sayfa)
+      ? sp.sayfa[0]
+      : sp.sayfa
+    : "1";
+  const sayfa = parseInt(page || "1", 10);
 
   const exists = await userIsExist(nickname);
 
@@ -19,9 +46,6 @@ export default async function AuthorPage({ params, searchParams }: PageProps) {
   const articles = await getArticlesByAuthor(nickname, sayfa, 10);
   return (
     <>
-      <p>
-        {nickname}-{sayfa}
-      </p>
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-6">
           {articles.items.map((article) => (

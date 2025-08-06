@@ -65,7 +65,7 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
           >
             <Image
               src={avatarSrc || "/placeholder.svg"}
-              alt={article.nickname}
+              alt="Yazar Avatarı"
               width={40}
               height={40}
               className="rounded-full object-cover"

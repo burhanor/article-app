@@ -1,6 +1,6 @@
 import TopArticleDto from "@/models/TopArticleDto";
 import apiClient from "./client";
-import { config } from "@/config/config";
+import { appConfig } from "@/config/appConfig";
 import { ArticleDto } from "@/models/Article";
 import { createGenericService } from "./genericService";
 import { getAvatars, getNicknames } from "./userService";
@@ -17,7 +17,7 @@ export async function getMostViewedArticles(
 ): Promise<TopArticleDto[]> {
   try {
     if (!count || count <= 0) {
-      count = config.MOST_VIEWED_ARTICLE_COUNT;
+      count = appConfig.MOST_VIEWED_ARTICLE_COUNT;
     }
     const response = await apiClient.get<TopArticleDto[]>(
       `/article/most-viewed?count=${count}`
@@ -37,7 +37,7 @@ export async function getTopRatedArticles(
 ): Promise<TopArticleDto[]> {
   try {
     if (!count || count <= 0) {
-      count = config.TOP_RATED_ARTICLE_COUNT;
+      count = appConfig.TOP_RATED_ARTICLE_COUNT;
     }
     const response = await apiClient.get<TopArticleDto[]>(
       `/article/top-rated?count=${count}`

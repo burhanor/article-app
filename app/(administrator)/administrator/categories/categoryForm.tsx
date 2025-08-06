@@ -17,12 +17,8 @@ import FormInput from "@/components/form/formInput/formInput";
 import FormStatusSelect from "@/components/form/formStatusSelect/formStatusSelect";
 import { handleFormSubmit } from "@/lib/formHelper";
 import categoryService from "@/services/categoryService";
-const defaultItem: Category = {
-  name: "",
-  slug: "",
-  status: Status.Pending,
-  id: 0,
-};
+import { defaultCategory as defaultItem } from "@/models/defaults/defaultCategory";
+
 export default function CategoryForm({
   className,
   modal,
@@ -45,42 +41,6 @@ export default function CategoryForm({
       status: selectedItem.status || Status.Pending,
     },
   });
-
-  //   try {
-  //     if (actionType === ActionTypes.ADD) {
-  //       const response = await addCategoryApi(data);
-
-  //       if (response.status === ResponseStatus.Success) {
-  //         showSuccess("Kategori başarıyla eklendi.");
-  //         addItem(response.data as Category);
-  //         modal.closeModal();
-  //       } else if (response.status === ResponseStatus.ValidationError) {
-  //         handleValidationErrors(form, response.validationErrors);
-  //       } else {
-  //         toast.error(
-  //           response.message || "Kategori eklenirken bir hata oluştu."
-  //         );
-  //       }
-  //     } else if (actionType === ActionTypes.UPDATE) {
-  //       data.id = selectedItem.id;
-  //       const response = await updateCategoryApi(data);
-
-  //       if (response.status === ResponseStatus.Success) {
-  //         showSuccess("Kategori güncellendi.");
-  //         updateItem(response.data as Category);
-  //         modal.closeModal();
-  //       } else if (response.status === ResponseStatus.ValidationError) {
-  //         handleValidationErrors(form, response.validationErrors);
-  //       } else {
-  //         toast.error(
-  //           response.message || "Kategori güncellenirken bir hata oluştu."
-  //         );
-  //       }
-  //     }
-  //   } catch {
-  //     toast.error("Sunucuya bağlanırken bir hata oluştu.");
-  //   }
-  // };
 
   const onSubmit = async (data: CategoryFormValues) => {
     await handleFormSubmit<Category, CategoryFormValues>({

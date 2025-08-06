@@ -22,16 +22,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import ImageUploadPreview from "@/components/imageUploads/image-upload-preview";
 import { handleFormSubmit } from "@/lib/formHelper";
-const defaultItem: User = {
-  nickname: "",
-  emailAddress: "",
-  userType: UserType.Guest,
-  isActive: false,
-  avatarPath: "",
-  password: "",
+import { defaultUser as defaultItem } from "@/models/defaults/defaultUser";
 
-  id: 0,
-};
 export default function UserForm({
   className,
   modal,
