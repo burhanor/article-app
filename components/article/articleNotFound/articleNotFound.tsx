@@ -1,10 +1,14 @@
 import { Search, FileX } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { getMenuItemsByType } from "@/services/menuItemService";
+import { MenuType } from "@/enums/MenuType";
+import Link from "next/link";
 
-export default function ArticleNotFound() {
+export default async function ArticleNotFound() {
+  const categories = await getMenuItemsByType(MenuType.Category);
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl mx-auto shadow-lg border-0 animate-in fade-in-0 ">
+    <div className=" bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
+      <Card className="w-full h-full max-w-4xl mx-auto shadow-lg border-0 animate-in fade-in-0 mt-20 ">
         <CardContent className="p-8 md:p-12 text-center">
           {/* Icon */}
           <div className="relative mb-8">
@@ -51,18 +55,17 @@ export default function ArticleNotFound() {
 
           {/* Popular Categories */}
           <div className="mt-8 pt-6 border-t border-slate-200 ">
-            <p className="text-sm text-slate-500 mb-3">Popüler Kategoriler:</p>
+            <p className="text-sm text-slate-500 mb-3">Popüler Kategoriler</p>
             <div className="flex flex-wrap gap-2 justify-center">
-              {["Teknoloji", "Sağlık", "Eğitim", "Spor", "Sanat", "Bilim"].map(
-                (category) => (
-                  <button
-                    key={category}
-                    className="px-3 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition-colors"
-                  >
-                    {category}
-                  </button>
-                )
-              )}
+              {categories.map((category) => (
+                <Link
+                  href={`/${category.link}`}
+                  key={category.id}
+                  className="px-3 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition-colors"
+                >
+                  {category.title}
+                </Link>
+              ))}
             </div>
           </div>
         </CardContent>

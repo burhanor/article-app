@@ -7,6 +7,7 @@ import { getArticle } from "@/services/articleService";
 import LikeDislikeButtons from "../likeDislikeButtons/likeDislikeButtons";
 import { formatDate, getAvatarUrl } from "@/lib/utils";
 import Link from "next/link";
+import { Status } from "@/enums/Status";
 
 interface ArticlePageProps {
   slug: string;
@@ -29,20 +30,24 @@ export default async function ArticlePage({ slug }: ArticlePageProps) {
             {/* Author and Meta Info */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-3">
-                <Avatar className="h-12 w-12 ring-2 ring-slate-200 dark:ring-slate-700">
-                  <AvatarImage
-                    src={getAvatarUrl(article.avatar)}
-                    alt={article.nickname}
-                  />
+                <Link href={`/yazar/${article.nickname}`}>
+                  <Avatar className="h-12 w-12 ring-2 ring-slate-200 dark:ring-slate-700">
+                    <AvatarImage
+                      src={getAvatarUrl(article.avatar)}
+                      alt={article.nickname}
+                    />
 
-                  <AvatarFallback>
-                    <User className="h-6 w-6" />
-                  </AvatarFallback>
-                </Avatar>
+                    <AvatarFallback>
+                      <User className="h-6 w-6" />
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-slate-100">
-                    {article.nickname}
-                  </p>
+                  <Link href={`/yazar/${article.nickname}`}>
+                    <p className="font-semibold text-slate-900 dark:text-slate-100">
+                      {article.nickname}
+                    </p>
+                  </Link>
                   <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
@@ -54,7 +59,7 @@ export default async function ArticlePage({ slug }: ArticlePageProps) {
                     </div>
                     <div className="flex items-center gap-1">
                       <Eye className="h-4 w-4" />
-                      {article.info.viewCount.toLocaleString()} views
+                      {article.info.viewCount.toLocaleString()} görüntülenme
                     </div>
                   </div>
                 </div>
@@ -72,17 +77,22 @@ export default async function ArticlePage({ slug }: ArticlePageProps) {
             {/* Categories */}
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2">
-                {article.categories.map((category) => (
-                  <Link href={`/kategori/${category.slug}`} key={category.slug}>
-                    <Badge
+                {article.categories
+                  .filter((c) => c.status == Status.Published)
+                  .map((category) => (
+                    <Link
+                      href={`/kategori/${category.slug}`}
                       key={category.slug}
-                      variant="secondary"
-                      className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors cursor-pointer"
                     >
-                      {category.name}
-                    </Badge>
-                  </Link>
-                ))}
+                      <Badge
+                        key={category.slug}
+                        variant="secondary"
+                        className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors cursor-pointer"
+                      >
+                        {category.name}
+                      </Badge>
+                    </Link>
+                  ))}
               </div>
             </div>
 
@@ -101,7 +111,9 @@ export default async function ArticlePage({ slug }: ArticlePageProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <Eye className="h-4 w-4 text-blue-500" />
-                  <span>{article.info.viewCount.toLocaleString()} views</span>
+                  <span>
+                    {article.info.viewCount.toLocaleString()} görüntülenme
+                  </span>
                 </div>
               </div>
 
