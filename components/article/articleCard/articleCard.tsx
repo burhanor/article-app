@@ -30,11 +30,11 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
         <h2 className="text-2xl font-bold text-gray-900 mb-3 leading-tight wrap-anywhere hover:text-blue-600 transition-colors duration-200">
           {article.title}
         </h2>
+        <div
+          className="text-gray-700 text-base leading-relaxed mb-4 line-height-relaxed line-clamp-3 flex-grow"
+          dangerouslySetInnerHTML={{ __html: article.content }}
+        ></div>
       </Link>
-      <div
-        className="text-gray-700 text-base leading-relaxed mb-4 line-height-relaxed line-clamp-3 flex-grow"
-        dangerouslySetInnerHTML={{ __html: article.content }}
-      ></div>
       {/* Kategoriler */}
       <div className="flex flex-wrap gap-2 mb-4">
         {article.categories
@@ -58,7 +58,7 @@ export default async function ArticleCard({ article }: ArticleCardProps) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-gray-100 mt-auto">
         {" "}
         {/* Yazar Bilgileri */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 hover:underline ">
           <Link
             href={`/yazar/${article.nickname}`}
             className="flex items-center space-x-3"
